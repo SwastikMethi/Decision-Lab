@@ -371,6 +371,16 @@ function DecisionLane({
         </div>
       </div>
       <footer className="diagram-verdict" aria-live="polite" aria-atomic="true">
+        {arrived && success && (
+          <span className="sr-only">
+            Selected:{" "}
+            {
+              frame.case?.options.find(
+                (option) => option.id === outcome.selected,
+              )?.label
+            }
+          </span>
+        )}
         <div className="verdict-main">
           {arrived ? (
             success ? (
@@ -431,6 +441,7 @@ export default function LivePlayback({ runId }: { runId: string }) {
   const [replay, setReplay] = useState(0);
   const [stepping, setStepping] = useState(false);
   const completedFrame = useRef(false);
+  const direction = useRef(1);
   const [params, setParams] = useSearchParams();
   const reduced = !!useReducedMotion();
   const pageStart = Math.floor(position / 20) * 20;
@@ -462,15 +473,21 @@ export default function LivePlayback({ runId }: { runId: string }) {
   useEffect(() => {
     if (page && position > maxPosition) setPosition(maxPosition);
     if (frame?.sealed && page && playing) {
-      const next = page.items.find(
-        (item) => item.ordinal > position && !item.sealed,
+      const backwards = direction.current < 0;
+      const next = (backwards ? [...page.items].reverse() : page.items).find(
+        (item) =>
+          !item.sealed &&
+          (backwards ? item.ordinal < position : item.ordinal > position),
       );
       if (next) setPosition(next.ordinal);
-      else if (page.next_cursor !== null) setPosition(page.next_cursor + 1);
+      else if (backwards && pageStart > 0) setPosition(pageStart - 1);
+      else if (!backwards && page.next_cursor !== null)
+        setPosition(page.next_cursor + 1);
       else setPlaying(false);
     }
-  }, [frame?.sealed, page, position, maxPosition, playing]);
+  }, [frame?.sealed, page, pageStart, position, maxPosition, playing]);
   const move = (next: number) => {
+    direction.current = next < position ? -1 : 1;
     completedFrame.current = false;
     setPlaying(true);
     setStepping(true);
@@ -525,6 +542,7 @@ export default function LivePlayback({ runId }: { runId: string }) {
             aria-label={playing ? "Pause playback" : "Play playback"}
             disabled={!frame || frame.sealed}
             onClick={() => {
+              direction.current = 1;
               if (
                 !playing &&
                 position === maxPosition &&

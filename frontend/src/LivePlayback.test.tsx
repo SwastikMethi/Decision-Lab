@@ -67,6 +67,7 @@ describe("paired answer animation", () => {
     );
     expect(screen.queryByText("Correct")).not.toBeInTheDocument();
     expect(screen.queryByText("80.0%")).not.toBeInTheDocument();
+    expect(screen.queryByText("Selected: Billing")).not.toBeInTheDocument();
     act(() => vi.advanceTimersByTime(1500));
     expect(screen.queryByText("Correct")).not.toBeInTheDocument();
     expect(finished).not.toHaveBeenCalled();
@@ -75,6 +76,8 @@ describe("paired answer animation", () => {
     expect(screen.getByText("Incorrect")).toBeInTheDocument();
     expect(screen.getByText("80.0%")).toBeInTheDocument();
     expect(screen.getByText("Recorded 42 ms")).toBeInTheDocument();
+    expect(screen.getByText("Selected: Billing")).toBeInTheDocument();
+    expect(screen.getByText("Selected: Technical")).toBeInTheDocument();
     act(() => vi.advanceTimersByTime(1100));
     expect(finished).toHaveBeenCalledTimes(1);
   });

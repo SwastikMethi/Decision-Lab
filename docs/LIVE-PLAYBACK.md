@@ -48,7 +48,16 @@ Approved in conversation on 25 September 2026. Base commit: `1e32629`.
 - Palette/type remain the app's Inter/slate, indigo and teal. The paired flow is the dominant visual; avoid extra decorative cards or constant background motion.
 - Task 1: complete. New endpoint tests failed with 404 before implementation; 4 projection tests now pass, and the full backend suite passed 57 tests. Mypy passes for 15 modules. OpenAPI and TypeScript contracts regenerated.
 - Task 2: complete. Frontend timing tests failed before the component existed; all 6 frontend tests now pass. Browser checks found and reproduced a shared CSS background collision, a failed-response answer highlight, and final-frame pause/resume issues; fixes are covered by the timing/accessibility/browser checks.
-- Task 3: verification passed; fresh review pending. All 5 browser scenarios pass, including the original end-to-end evaluation workflow, desktop/dark mode, exact batch evidence, mobile 100-option lists, reduced motion, failed responses and sealed placeholders. Packet-in-flight, desktop, mobile and dark screenshots inspected. Production build, Ruff, formatting, Mypy and runtime OpenAPI contract checks pass.
+- Task 3: complete. Final suites pass: 57 backend, 6 frontend, 7 browser scenarios. These include the original evaluation workflow, desktop/dark mode, exact batch evidence, mobile 100-option lists, reduced motion, failed responses, sealed placeholders and the review regressions below. Packet-in-flight, desktop, mobile and dark screenshots inspected. Production build, Ruff, formatting, Mypy and runtime OpenAPI contract checks pass.
 - Ruling: browser tests use ports 5183/8778 and one worker — the user's app and another project occupy the original ports, and the backend permits one active evaluation — cost if wrong: only the test-port configuration needs adjustment.
 - The Vite proxy preserves the browser's Host header, so local origin checks work on either development or isolated test ports without loosening backend validation.
 - One requestAnimationFrame clock controls packets, bars and verdict timing. A second interpolation clock was removed after a browser test showed movement after Pause.
+
+## Final review
+
+A fresh read-only reviewer reviewed `1e32629..987356a`. Three Important findings, no Critical or Minor findings, and no declined judgments. All three fixed in one pass:
+
+- Final: fixed stale pending inspection — browser regression first showed missing results labeled as incorrect, then passed after the shared drawer polled pending evidence and refreshed on terminal status. Pending, failed and terminal missing outcomes now have distinct labels.
+- Final: fixed backward navigation across sealed comparisons — browser regression first remained at comparison 23 instead of 19; it now crosses sealed intervals and page boundaries in both directions.
+- Final: fixed selected-answer accessibility — timing regression first could not find the selected answer; the verdict now names the selected label for screen readers, only after arrival.
+- Each regression was observed failing before its fix; final suite 57/57 backend, 6/6 frontend, 7/7 browser. No additional provider calls were made.

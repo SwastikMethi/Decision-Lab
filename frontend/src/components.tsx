@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   AlertCircle,
   Check,
@@ -15,7 +15,16 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { request, label, systemName, color, pct, number } from "./api";
+import {
+  request,
+  label,
+  systemName,
+  color,
+  pct,
+  number,
+  useRun,
+  isTerminal,
+} from "./api";
 import type { CaseDetail, RiskPoint } from "./types";
 
 export function cn(...inputs: Parameters<typeof clsx>) {
@@ -307,11 +316,33 @@ export function EvidenceDrawer({ runId }: { runId: string }) {
   const jevEvaluation = params.get("jev_evaluation"),
     layaEvaluation = params.get("laya_evaluation");
   const reduced = useReducedMotion();
+  const run = useRun(caseId ? runId : "");
+  const terminal = isTerminal(run.data?.status);
   const query = useQuery({
     queryKey: ["case", runId, caseId, jevEvaluation, layaEvaluation],
     queryFn: () => request<CaseDetail>("/runs/" + runId + "/cases/" + caseId),
     enabled: !!caseId,
+    refetchInterval: (q) => {
+      if (terminal) return false;
+      const complete =
+        jevEvaluation || layaEvaluation
+          ? [jevEvaluation, layaEvaluation].every(
+              (id) =>
+                !id ||
+                q.state.data?.all_predictions.some(
+                  (p) => p.evaluation_id === id,
+                ),
+            )
+          : ["jev", "laya"].every(
+              (system) => q.state.data?.predictions[system],
+            );
+      return complete ? false : 1000;
+    },
   });
+  const refetch = query.refetch;
+  useEffect(() => {
+    if (caseId && terminal) void refetch();
+  }, [caseId, terminal, refetch]);
   const close = () => {
     const next = new URLSearchParams(params);
     next.delete("case");
@@ -432,32 +463,46 @@ export function EvidenceDrawer({ runId }: { runId: string }) {
                     <h3>Criteria</h3>
                     <JsonBlock value={data.case.question.criteria} />
                     <div className="paired">
-                      {["jev", "laya"].map((key) => (
-                        <div className="answer-card" key={key}>
-                          <span className="model-name">
-                            <i style={{ background: color(key) }} />
-                            {systemName(key)}
-                          </span>
-                          <strong>
-                            {data.predictions[key]?.answer?.selected ??
-                              "No valid answer"}
-                          </strong>
-                          <span
-                            className={
-                              data.correctness[key]
-                                ? "success-text"
-                                : "error-text"
-                            }
-                          >
-                            {data.correctness[key]
-                              ? "Correct"
-                              : "Incorrect or failed"}
-                          </span>
-                          {data.predictions[key]?.error && (
-                            <p>{data.predictions[key].error?.message}</p>
-                          )}
-                        </div>
-                      ))}
+                      {["jev", "laya"].map((key) => {
+                        const prediction = data.predictions[key];
+                        const valid =
+                          prediction?.status === "success" &&
+                          !!prediction.answer;
+                        const outcome = valid
+                          ? data.correctness[key]
+                            ? "Correct"
+                            : "Incorrect"
+                          : prediction
+                            ? "No valid response"
+                            : terminal
+                              ? "Not completed"
+                              : "Awaiting result";
+                        return (
+                          <div className="answer-card" key={key}>
+                            <span className="model-name">
+                              <i style={{ background: color(key) }} />
+                              {systemName(key)}
+                            </span>
+                            <strong>
+                              {prediction?.answer?.selected ?? "—"}
+                            </strong>
+                            <span
+                              className={
+                                !valid
+                                  ? "muted"
+                                  : data.correctness[key]
+                                    ? "success-text"
+                                    : "error-text"
+                              }
+                            >
+                              {outcome}
+                            </span>
+                            {data.predictions[key]?.error && (
+                              <p>{data.predictions[key].error?.message}</p>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </Tabs.Content>
                   <Tabs.Content value="probabilities">

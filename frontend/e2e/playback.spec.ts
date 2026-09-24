@@ -1,5 +1,6 @@
 import { test, expect, type APIRequestContext } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import type { PlaybackPage } from "../src/types";
 
 async function createRun(request: APIRequestContext, large = false) {
   const values = large
@@ -288,4 +289,101 @@ test("large option lists, reduced motion, mobile, failures and sealed placeholde
   await page.reload();
   await expect(page.getByText("These results are still sealed")).toBeVisible();
   await expect(page.locator(".diagram-option")).toHaveCount(0);
+});
+
+test("previous and next cross sealed comparisons and page boundaries", async ({
+  page,
+  request,
+}) => {
+  const run = await createRun(request);
+  const saved: PlaybackPage = await (
+    await request.get(`/api/v1/runs/${run}/playback`)
+  ).json();
+  const frames = Array.from({ length: 23 }, (_, ordinal) => ({
+    ...saved.items[0],
+    key: `navigation:${ordinal}`,
+    ordinal,
+    ...([0, 18, 22].includes(ordinal)
+      ? {}
+      : { sealed: true, case: null, systems: {} }),
+  }));
+  await page.route("**/playback?*", async (route) => {
+    const after = Number(
+      new URL(route.request().url()).searchParams.get("after"),
+    );
+    const items = frames.slice(after + 1, after + 21);
+    await route.fulfill({
+      json: {
+        ...saved,
+        items,
+        total_frames: frames.length,
+        withheld_frames: 20,
+        latest_available: 22,
+        next_cursor: after + 21 < frames.length ? items.at(-1)!.ordinal : null,
+      },
+    });
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`/runs/${run}/live`);
+  await page.getByRole("button", { name: "Jump to latest" }).click();
+  await expect(page.locator(".case-position")).toHaveText("Comparison 23 / 23");
+  await page.getByRole("button", { name: "Previous comparison" }).click();
+  await expect(page.locator(".case-position")).toHaveText("Comparison 19 / 23");
+  await page.getByRole("button", { name: "Previous comparison" }).click();
+  await expect(page.locator(".case-position")).toHaveText("Comparison 1 / 23");
+  await page.getByRole("button", { name: "Next comparison" }).click();
+  await expect(page.locator(".case-position")).toHaveText("Comparison 19 / 23");
+  await page.getByRole("button", { name: "Next comparison" }).click();
+  await expect(page.locator(".case-position")).toHaveText("Comparison 23 / 23");
+});
+
+test("inspection refreshes pending requests without mislabeling them as incorrect", async ({
+  page,
+  request,
+}) => {
+  const run = await createRun(request);
+  const saved: PlaybackPage = await (
+    await request.get(`/api/v1/runs/${run}/playback`)
+  ).json();
+  const frame = saved.items[0];
+  let released = false,
+    reads = 0;
+  await page.route(`**/api/v1/runs/${run}`, async (route) => {
+    const response = await route.fetch(),
+      data = await response.json();
+    if (!released) {
+      data.status = "running";
+      data.ended_at = null;
+    }
+    await route.fulfill({ response, json: data });
+  });
+  await page.route(
+    `**/api/v1/runs/${run}/cases/${frame.case!.id}`,
+    async (route) => {
+      reads++;
+      const response = await route.fetch(),
+        data = await response.json();
+      if (!released) {
+        data.predictions = {};
+        data.all_predictions = [];
+      }
+      await route.fulfill({ response, json: data });
+    },
+  );
+  await page.goto(`/runs/${run}/live`);
+  await page.getByRole("button", { name: "Inspect", exact: true }).click();
+  const drawer = page.getByRole("dialog");
+  await expect(
+    drawer.getByText("Awaiting result", { exact: true }),
+  ).toHaveCount(2);
+  await expect(drawer.getByText("Incorrect or failed")).toHaveCount(0);
+  released = true;
+  await expect(drawer.locator(".answer-card strong")).toHaveText([
+    frame.systems.jev.selected!,
+    frame.systems.laya.selected!,
+  ]);
+  await expect(
+    drawer.getByText("Awaiting result", { exact: true }),
+  ).toHaveCount(0);
+  expect(reads).toBeGreaterThan(1);
 });
