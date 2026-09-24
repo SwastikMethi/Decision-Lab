@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "decisionlab"
+version = "0.1.0"
+description = "Auditable paired evaluation of typed decision systems"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.30,<1", "pydantic>=2.10,<3",
+  "python-multipart>=0.0.20", "numpy>=2,<3", "scipy>=1.14,<2",
+  "scikit-learn>=1.5,<2", "psutil>=6,<8", "python-dotenv>=1,<2",
+  "typesafe-sdk", "httpx>=0.27,<1", "uuid6>=2024.7.10",
+  "markdown-it-py>=3,<5",
+]
+
+[project.optional-dependencies]
+laya = ["laya==0.3.20"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=0.24", "ruff>=0.11", "mypy>=1.15", "types-psutil"]
+
+[project.scripts]
+decisionlab = "decisionlab.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["backend/decisionlab"]
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+check_untyped_defs = true
