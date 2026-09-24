@@ -20,6 +20,7 @@ from .datasets import MAX_UPLOAD
 from .governance import freeze_protocol, import_reviews, review_packet, review_status
 from .laya_runtime import LayaAdapter
 from .metrics import SCORING_VERSION, gold
+from .playback import PlaybackPage, playback_page
 from .reports import bundle, write_reports
 from .runner import Runner, make_schedule
 from .schemas import LayaConfiguration, RunConfiguration
@@ -377,6 +378,14 @@ def create_app(root=None):
                 }
             )
         return {"items": result, "total": len(rows), "page": page, "page_size": page_size}
+
+    @app.get("/api/v1/runs/{run_id}/playback", response_model=PlaybackPage)
+    def playback(
+        run_id: str,
+        after: int = Query(-1, ge=-1),
+        limit: int = Query(20, ge=1, le=100),
+    ):
+        return playback_page(store, run_id, after, limit)
 
     @app.get("/api/v1/runs/{run_id}/cases/{case_id}")
     def case_detail(run_id: str, case_id: str):

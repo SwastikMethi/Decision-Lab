@@ -304,23 +304,54 @@ export function Filters({
 export function EvidenceDrawer({ runId }: { runId: string }) {
   const [params, setParams] = useSearchParams();
   const caseId = params.get("case");
+  const jevEvaluation = params.get("jev_evaluation"),
+    layaEvaluation = params.get("laya_evaluation");
   const reduced = useReducedMotion();
   const query = useQuery({
-    queryKey: ["case", runId, caseId],
+    queryKey: ["case", runId, caseId, jevEvaluation, layaEvaluation],
     queryFn: () => request<CaseDetail>("/runs/" + runId + "/cases/" + caseId),
     enabled: !!caseId,
   });
   const close = () => {
     const next = new URLSearchParams(params);
     next.delete("case");
+    next.delete("jev_evaluation");
+    next.delete("laya_evaluation");
     setParams(next);
   };
   const select = (id: string) => {
     const next = new URLSearchParams(params);
     next.set("case", id);
+    next.delete("jev_evaluation");
+    next.delete("laya_evaluation");
     setParams(next);
   };
-  const data = query.data;
+  let data = query.data;
+  if (data && (jevEvaluation || layaEvaluation)) {
+    const predictions = Object.fromEntries(
+      [
+        ["jev", jevEvaluation],
+        ["laya", layaEvaluation],
+      ].flatMap(([system, id]) => {
+        const prediction = data?.all_predictions.find(
+          (p) => p.evaluation_id === id,
+        );
+        return prediction ? [[system, prediction]] : [];
+      }),
+    );
+    data = {
+      ...data,
+      predictions,
+      correctness: Object.fromEntries(
+        ["jev", "laya"].map((system) => [
+          system,
+          predictions[system]?.status === "success" &&
+            predictions[system]?.answer?.selected ===
+              String(data?.case.expected.value),
+        ]),
+      ),
+    };
+  }
   const outcomes = data
     ? Object.keys(
         data.predictions.jev?.answer?.probabilities ||
@@ -381,6 +412,9 @@ export function EvidenceDrawer({ runId }: { runId: string }) {
                   </Tabs.List>
                   <Tabs.Content value="decision">
                     <div className="evidence-meta">
+                      {(jevEvaluation || layaEvaluation) && (
+                        <span className="badge">Selected playback request</span>
+                      )}
                       <span className="badge">
                         {label(data.case.primitive)}
                       </span>

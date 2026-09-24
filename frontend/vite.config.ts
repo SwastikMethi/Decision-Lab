@@ -7,7 +7,12 @@ export default defineConfig({
   server: {
     host: "127.0.0.1",
     port: 5173,
-    proxy: { "/api": "http://127.0.0.1:8768" },
+    proxy: {
+      "/api": {
+        target: process.env.DECISIONLAB_API_TARGET || "http://127.0.0.1:8768",
+        changeOrigin: false,
+      },
+    },
   },
   build: { outDir: "dist", chunkSizeWarningLimit: 800 },
   test: {

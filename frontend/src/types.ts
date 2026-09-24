@@ -1,5 +1,8 @@
 import type { components } from "./api-schema";
 export type RunConfig = components["schemas"]["RunConfiguration"];
+export type PlaybackFrame = components["schemas"]["PlaybackFrame"];
+export type PlaybackPage = components["schemas"]["PlaybackPage"];
+export type PlaybackOutcome = components["schemas"]["PlaybackOutcome"];
 export type Json =
   string | number | boolean | null | Json[] | { [key: string]: Json };
 export interface Metric {

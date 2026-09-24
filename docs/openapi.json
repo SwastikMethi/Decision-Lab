@@ -923,6 +923,68 @@
         }
       }
     },
+    "/api/v1/runs/{run_id}/playback": {
+      "get": {
+        "summary": "Playback",
+        "operationId": "playback_api_v1_runs__run_id__playback_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": -1,
+              "default": -1,
+              "title": "After"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaybackPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/runs/{run_id}/cases/{case_id}": {
       "get": {
         "summary": "Case Detail",
@@ -1729,6 +1791,272 @@
         "additionalProperties": false,
         "type": "object",
         "title": "Performance"
+      },
+      "PlaybackCase": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "primitive": {
+            "type": "string",
+            "enum": [
+              "choice",
+              "noul",
+              "score"
+            ],
+            "title": "Primitive"
+          },
+          "variant": {
+            "type": "string",
+            "title": "Variant"
+          },
+          "instructions": {
+            "type": "string",
+            "title": "Instructions"
+          },
+          "input_preview": {
+            "type": "string",
+            "title": "Input Preview"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/PlaybackOption"
+            },
+            "type": "array",
+            "title": "Options"
+          },
+          "expected_key": {
+            "type": "string",
+            "title": "Expected Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "primitive",
+          "variant",
+          "instructions",
+          "input_preview",
+          "options",
+          "expected_key"
+        ],
+        "title": "PlaybackCase"
+      },
+      "PlaybackFrame": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "ordinal": {
+            "type": "integer",
+            "title": "Ordinal"
+          },
+          "sealed": {
+            "type": "boolean",
+            "title": "Sealed"
+          },
+          "suite": {
+            "type": "string",
+            "title": "Suite"
+          },
+          "repetition": {
+            "type": "integer",
+            "title": "Repetition"
+          },
+          "concurrency": {
+            "type": "integer",
+            "title": "Concurrency"
+          },
+          "batch_size": {
+            "type": "integer",
+            "title": "Batch Size"
+          },
+          "case": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlaybackCase"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "systems": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlaybackOutcome"
+            },
+            "type": "object",
+            "title": "Systems"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "ordinal",
+          "sealed",
+          "suite",
+          "repetition",
+          "concurrency",
+          "batch_size",
+          "case",
+          "systems"
+        ],
+        "title": "PlaybackFrame"
+      },
+      "PlaybackOption": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "title": "PlaybackOption"
+      },
+      "PlaybackOutcome": {
+        "properties": {
+          "evaluation_id": {
+            "type": "string",
+            "title": "Evaluation Id"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "success",
+              "failed",
+              "not_completed"
+            ],
+            "title": "State"
+          },
+          "selected": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selected"
+          },
+          "probabilities": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Probabilities"
+          },
+          "correctness": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Correctness"
+          },
+          "latency_ms": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latency Ms"
+          },
+          "retry_count": {
+            "type": "integer",
+            "title": "Retry Count",
+            "default": 0
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "evaluation_id",
+          "state"
+        ],
+        "title": "PlaybackOutcome"
+      },
+      "PlaybackPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlaybackFrame"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "total_frames": {
+            "type": "integer",
+            "title": "Total Frames"
+          },
+          "withheld_frames": {
+            "type": "integer",
+            "title": "Withheld Frames"
+          },
+          "latest_available": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Available"
+          },
+          "run_status": {
+            "type": "string",
+            "title": "Run Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor",
+          "total_frames",
+          "withheld_frames",
+          "latest_available",
+          "run_status"
+        ],
+        "title": "PlaybackPage"
       },
       "ProtocolRequest": {
         "properties": {

@@ -18,6 +18,7 @@ import {
   Upload,
 } from "lucide-react";
 import { motion } from "framer-motion";
+import LivePlayback from "../LivePlayback";
 import {
   color,
   isTerminal,
@@ -284,7 +285,9 @@ export function Live() {
     return () => clearInterval(timer);
   }, []);
   useEffect(() => {
-    const seen = new Set<string>();
+    let lastId = 0;
+    let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+    setEvents([]);
     const source = new EventSource("/api/v1/runs/" + runId + "/events");
     const kinds = [
       "run.created",
@@ -302,11 +305,19 @@ export function Live() {
       "run.cancelled",
       "run.failed",
     ];
+    const refreshPlayback = () => {
+      if (refreshTimer !== undefined) return;
+      refreshTimer = setTimeout(() => {
+        refreshTimer = undefined;
+        client.invalidateQueries({ queryKey: ["playback", runId] });
+      }, 1000);
+    };
     kinds.forEach((type) =>
       source.addEventListener(type, (event) => {
         const message = event as MessageEvent;
-        if (seen.has(message.lastEventId)) return;
-        seen.add(message.lastEventId);
+        const id = Number(message.lastEventId);
+        if (id <= lastId) return;
+        lastId = id;
         const data = JSON.parse(message.data);
         setEvents((previous) =>
           [{ id: message.lastEventId, type, ...data }, ...previous].slice(
@@ -316,13 +327,22 @@ export function Live() {
         );
         if (type.startsWith("run.") || type.includes("scoring"))
           client.invalidateQueries({ queryKey: ["run", runId] });
+        if (
+          type === "case.completed" ||
+          type === "case.failed" ||
+          type.startsWith("run.")
+        )
+          refreshPlayback();
         if (["run.completed", "run.cancelled", "run.failed"].includes(type)) {
           source.close();
           client.invalidateQueries({ queryKey: ["runs"] });
         }
       }),
     );
-    return () => source.close();
+    return () => {
+      source.close();
+      clearTimeout(refreshTimer);
+    };
   }, [runId, client]);
   const run = query.data;
   if (query.isLoading) return <Loading />;
@@ -337,12 +357,11 @@ export function Live() {
   const progress = run.progress.total
     ? run.progress.completed / run.progress.total
     : 0;
-  const phases = ["validating", "warming", "running", "scoring", "completed"];
   return (
-    <div className="page">
+    <div className="page live-page">
       <PageTitle
         title={run.name}
-        description="Follow both systems from the same input to persisted evidence."
+        description="One question. Two models. Watch their decisions unfold."
         action={
           done ? (
             <Link className="button primary" to={"/runs/" + runId + "/results"}>
@@ -362,176 +381,137 @@ export function Live() {
         }
       />
       {run.mode === "fake" && (
-        <div className="notice">
-          <FlaskConical size={18} />
+        <div className="notice live-notice">
+          <FlaskConical size={17} />
           <p>
-            Simulated outcomes — this run demonstrates the product, not either
-            model’s performance.
+            Simulated outcomes — an illustration of the workflow, not model
+            performance.
           </p>
         </div>
       )}
       <ErrorBox error={query.error || cancel.error} />
-      {run.warnings.map((w) => (
-        <div className="notice" key={w}>
-          <Info size={17} />
-          <p>{w}</p>
-        </div>
-      ))}
-      <Panel className="live-progress">
-        <div className="live-topline">
+      {run.warnings
+        .filter((w) => !(run.mode === "fake" && w.startsWith("SIMULATED")))
+        .map((w) => (
+          <div className="notice" key={w}>
+            <Info size={17} />
+            <p>{w}</p>
+          </div>
+        ))}
+      <section className="live-run-strip" aria-label="Evaluation progress">
+        <div className="live-run-state">
           <Status value={run.status} />
           <span>
-            <Clock3 size={15} /> {Math.floor(elapsed / 60)}m{" "}
-            {Math.floor(elapsed % 60)}s elapsed
+            <Clock3 size={14} />
+            {Math.floor(elapsed / 60)}m {Math.floor(elapsed % 60)}s
           </span>
         </div>
-        <div className="progress-title">
-          <h2>
-            {done
-              ? run.status === "completed"
-                ? "Your evaluation is ready"
-                : "Execution stopped; evidence preserved"
-              : "Building your comparison"}
-          </h2>
-          <strong>
-            {Math.round(progress * 100)}
-            <span>%</span>
-          </strong>
-        </div>
-        <div
-          className="progress-track"
-          role="progressbar"
-          aria-label="Evaluation progress"
-          aria-valuemin={0}
-          aria-valuemax={run.progress.total || 1}
-          aria-valuenow={run.progress.completed}
-        >
-          <motion.div
-            animate={{ width: progress * 100 + "%" }}
-            transition={{ duration: 0.3 }}
-          />
-        </div>
-        <div className="progress-caption">
-          <span>
-            {run.progress.completed.toLocaleString()} /{" "}
-            {run.progress.total.toLocaleString()} measured requests saved
-          </span>
-          <span>Warm-up excluded</span>
-        </div>
-        <ol className="phase-timeline">
-          {phases.map((phase, index) => (
-            <li
-              className={index <= phases.indexOf(run.status) ? "reached" : ""}
-              key={phase}
-            >
-              <span>
-                {index < phases.indexOf(run.status) ? (
-                  <CheckCircle2 size={16} />
-                ) : (
-                  index + 1
-                )}
-              </span>
-              {label(phase)}
-            </li>
-          ))}
-        </ol>
-      </Panel>
-      <div className="paired">
-        {["jev", "laya"].map((key) => {
-          const lane = run.progress.systems[key + "-" + run.track];
-          return (
-            <Panel
-              key={key}
-              title={systemName(key)}
-              description={
-                key === "jev"
-                  ? "End-to-end API requests"
-                  : "Local inference on the selected device"
-              }
-            >
-              <div className="lane-total" style={{ color: color(key) }}>
-                {lane?.completed ?? 0}
-                <span> outcomes saved</span>
-              </div>
-              <div className="lane-stats">
-                <div>
-                  <span>Failures</span>
-                  <strong>{lane?.failures ?? 0}</strong>
-                </div>
-                <div>
-                  <span>Retries</span>
-                  <strong>{lane?.retries ?? 0}</strong>
-                </div>
-                <div>
-                  <span>Latest latency</span>
-                  <strong>
-                    {number(lane?.latency_ms, 0)}
-                    <small> ms</small>
-                  </strong>
-                </div>
-              </div>
-              <p className="caption">
-                {done
-                  ? "Final metrics are calculated from saved evidence."
-                  : "Counts are provisional until execution and scoring finish."}
-              </p>
-            </Panel>
-          );
-        })}
-      </div>
-      <Panel
-        title="Activity"
-        description="Events are saved with the run and replayed after reconnection."
-        action={
-          <select
-            aria-label="Activity filter"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+        <div className="live-run-meter">
+          <div>
+            <span>
+              {run.progress.completed.toLocaleString()} /{" "}
+              {run.progress.total.toLocaleString()} requests saved
+            </span>
+            <strong>{Math.round(progress * 100)}%</strong>
+          </div>
+          <div
+            className="progress-track"
+            role="progressbar"
+            aria-label="Evaluation progress"
+            aria-valuemin={0}
+            aria-valuemax={run.progress.total || 1}
+            aria-valuenow={run.progress.completed}
           >
-            <option value="all">All events</option>
-            <option value="jev">Jev</option>
-            <option value="laya">Laya</option>
-            <option value="failed">Failures</option>
-          </select>
-        }
-      >
-        <div className="activity-list" aria-live="polite">
-          {events
-            .filter(
-              (e) =>
-                filter === "all" ||
-                (filter === "failed"
-                  ? e.type.includes("failed")
-                  : e.system_id?.startsWith(filter)),
-            )
-            .slice(0, 25)
-            .map((event) => (
-              <div className="activity-event" key={event.id}>
-                <span
-                  className={
-                    event.type.includes("failed") ? "error-text" : "muted"
-                  }
-                >
-                  <Activity size={14} />
-                </span>
-                <div>
-                  <strong>{label(event.type.replace(".", " "))}</strong>
-                  <small>
-                    {event.case_id || event.suite || "Run lifecycle"}{" "}
-                    {event.error?.message}
-                  </small>
-                </div>
-                {event.system_id && (
-                  <span className="badge">{systemName(event.system_id)}</span>
-                )}
-                <span className="event-id">#{event.id}</span>
-              </div>
-            ))}
-          {events.length === 0 && (
-            <p className="muted">Connecting to the saved event stream…</p>
-          )}
+            <motion.div
+              animate={{ width: progress * 100 + "%" }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
         </div>
-      </Panel>
+        <div className="live-saved-counts">
+          {["jev", "laya"].map((system) => (
+            <span key={system}>
+              <i style={{ background: color(system) }} />
+              {systemName(system)}
+              <strong>
+                {run.progress.systems[system + "-" + run.track]?.completed ?? 0}
+              </strong>
+            </span>
+          ))}
+        </div>
+      </section>
+      <LivePlayback key={runId} runId={runId} />
+      <details className="live-details">
+        <summary>
+          Details<span>Timing, retries, and activity</span>
+        </summary>
+        <div className="live-model-details">
+          {["jev", "laya"].map((system) => {
+            const lane = run.progress.systems[system + "-" + run.track];
+            return (
+              <div key={system}>
+                <strong>{systemName(system)}</strong>
+                <span>{lane?.failures ?? 0} failures</span>
+                <span>{lane?.retries ?? 0} retries</span>
+                <span>Latest latency {number(lane?.latency_ms, 0)} ms</span>
+              </div>
+            );
+          })}
+        </div>
+        <Panel
+          title="Activity"
+          description="Saved events; warm-up is excluded from measured request totals."
+          action={
+            <select
+              aria-label="Activity filter"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="all">All events</option>
+              <option value="jev">Jev</option>
+              <option value="laya">Laya</option>
+              <option value="failed">Failures</option>
+            </select>
+          }
+        >
+          <div className="activity-list">
+            {events
+              .filter(
+                (e) =>
+                  filter === "all" ||
+                  (filter === "failed"
+                    ? e.type.includes("failed")
+                    : e.system_id?.startsWith(filter)),
+              )
+              .slice(0, 25)
+              .map((event) => (
+                <div className="activity-event" key={event.id}>
+                  <span
+                    className={
+                      event.type.includes("failed") ? "error-text" : "muted"
+                    }
+                  >
+                    <Activity size={14} />
+                  </span>
+                  <div>
+                    <strong>{label(event.type.replace(".", " "))}</strong>
+                    <small>
+                      {event.case_id || event.suite || "Run lifecycle"}{" "}
+                      {event.error?.message}
+                    </small>
+                  </div>
+                  {event.system_id && (
+                    <span className="badge">{systemName(event.system_id)}</span>
+                  )}
+                  <span className="event-id">#{event.id}</span>
+                </div>
+              ))}
+            {events.length === 0 && (
+              <p className="muted">Connecting to the saved event stream…</p>
+            )}
+          </div>
+        </Panel>
+      </details>
     </div>
   );
 }

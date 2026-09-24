@@ -15,7 +15,7 @@ npm run build
 
 Open **http://127.0.0.1:8768**. Choose **New evaluation → Development collection → Simulation** to exercise the whole workflow without credentials or model downloads. Simulation is visibly labeled throughout, including exports; its numbers say nothing about either provider.
 
-For frontend development, run `.venv/bin/decisionlab serve --reload` in one terminal and `npm run dev` in another. Vite serves http://127.0.0.1:5173 and proxies the API. Keep the backend on port 8768 for this proxy.
+For frontend development, run `.venv/bin/decisionlab serve --reload` in one terminal and `npm run dev` in another. Vite serves http://127.0.0.1:5173 and proxies the API. The backend defaults to port 8768; set `DECISIONLAB_API_TARGET` to use another address.
 
 ## Live providers
 
@@ -56,6 +56,8 @@ You can import UTF-8 JSONL up to 25 MiB. The validator checks native labels, dup
 
 ## Evidence and recovery
 
+**Live run** plays each saved question through side-by-side Jev and Laya diagrams: input → model → selected option → correct/incorrect. Bars show the saved probabilities. Pause, step, change speed, or jump to the latest comparison; **Inspect** opens the exact request shown, including repeats and batches. Playback never makes provider calls or slows evaluation, and Results open as soon as the evaluation finishes. Position and speed survive refresh in the same browser tab. Reduced motion shows outcomes without traveling packets.
+
 Data lives under `data/` by default; set `DECISIONLAB_DATA_ROOT` to change it. A run includes immutable case/configuration snapshots, a seeded schedule, append-only predictions/events/errors, warm-up evidence, environment information, and versioned metrics. Frozen runs additionally snapshot reviews, protocols, and calibration artifacts. Reports and ZIP bundles include checksums.
 
 Refresh or reopen the browser to reconnect to the run. Cancellation stops new work and allows up to five seconds for an in-flight request before cancellation. Restarting after a crash marks interrupted runs partial and retains complete JSONL records, ignoring a torn final record. It does not silently retry them. One backend process may own a data root at a time; use the UI to rescore while it is running, or stop it before using:
@@ -82,7 +84,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Offline tests need neither a provider key nor Laya weights. Browser tests start their own backend using `test-results/data` and test refresh, evidence, export, accessibility, and mobile reduced motion. Stop other servers on ports 5173 and 8768 before running them. CI runs the same checks using locked dependencies; it does not make paid provider calls.
+Offline tests need neither a provider key nor Laya weights. Browser tests use isolated ports 5183 and 8778 with `test-results/data`, covering playback, refresh, evidence, export, accessibility, and mobile reduced motion. CI runs the same checks using locked dependencies; it does not make paid provider calls.
 
 Regenerate the TypeScript request contract after API changes:
 

@@ -243,6 +243,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/v1/runs/{run_id}/playback": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** Playback */
+    get: operations["playback_api_v1_runs__run_id__playback_get"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/v1/runs/{run_id}/cases/{case_id}": {
     parameters: {
       query?: never;
@@ -524,6 +541,97 @@ export interface components {
        * @default 30
        */
       sample_size: number;
+    };
+    /** PlaybackCase */
+    PlaybackCase: {
+      /** Id */
+      id: string;
+      /**
+       * Primitive
+       * @enum {string}
+       */
+      primitive: "choice" | "noul" | "score";
+      /** Variant */
+      variant: string;
+      /** Instructions */
+      instructions: string;
+      /** Input Preview */
+      input_preview: string;
+      /** Options */
+      options: components["schemas"]["PlaybackOption"][];
+      /** Expected Key */
+      expected_key: string;
+    };
+    /** PlaybackFrame */
+    PlaybackFrame: {
+      /** Key */
+      key: string;
+      /** Ordinal */
+      ordinal: number;
+      /** Sealed */
+      sealed: boolean;
+      /** Suite */
+      suite: string;
+      /** Repetition */
+      repetition: number;
+      /** Concurrency */
+      concurrency: number;
+      /** Batch Size */
+      batch_size: number;
+      case: components["schemas"]["PlaybackCase"] | null;
+      /** Systems */
+      systems: {
+        [key: string]: components["schemas"]["PlaybackOutcome"];
+      };
+    };
+    /** PlaybackOption */
+    PlaybackOption: {
+      /** Id */
+      id: string;
+      /** Label */
+      label: string;
+    };
+    /** PlaybackOutcome */
+    PlaybackOutcome: {
+      /** Evaluation Id */
+      evaluation_id: string;
+      /**
+       * State
+       * @enum {string}
+       */
+      state: "pending" | "success" | "failed" | "not_completed";
+      /** Selected */
+      selected?: string | null;
+      /** Probabilities */
+      probabilities?: {
+        [key: string]: number;
+      };
+      /** Correctness */
+      correctness?: boolean | null;
+      /** Latency Ms */
+      latency_ms?: number | null;
+      /**
+       * Retry Count
+       * @default 0
+       */
+      retry_count: number;
+      /** Error */
+      error?: string | null;
+    };
+    /** PlaybackPage */
+    PlaybackPage: {
+      /** Items */
+      items: components["schemas"]["PlaybackFrame"][];
+      /** Next Cursor */
+      next_cursor: number | null;
+      /** Total Frames */
+      total_frames: number;
+      /** Withheld Frames */
+      withheld_frames: number;
+      /** Latest Available */
+      latest_available: number | null;
+      /** Run Status */
+      run_status: string;
     };
     /** ProtocolRequest */
     ProtocolRequest: {
@@ -1140,6 +1248,40 @@ export interface operations {
         };
         content: {
           "application/json": unknown;
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  playback_api_v1_runs__run_id__playback_get: {
+    parameters: {
+      query?: {
+        after?: number;
+        limit?: number;
+      };
+      header?: never;
+      path: {
+        run_id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PlaybackPage"];
         };
       };
       /** @description Validation Error */

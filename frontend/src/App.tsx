@@ -216,6 +216,7 @@ export default function App() {
                     {isTerminal(run.data.status) && (
                       <a
                         className="button secondary small"
+                        aria-label="Export bundle"
                         href={"/api/v1/runs/" + runId + "/exports/bundle"}
                       >
                         <ArrowDownToLine size={15} />
