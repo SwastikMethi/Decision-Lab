@@ -474,6 +474,9 @@ class BenchmarkWorkflowManager:
     def _kpis(summary):
         result = {}
         for system, values in summary["systems"].items():
+            cost = values["cost"]
+            reported_cost = cost.get("provider_reported_total_usd")
+            estimated_cost = cost.get("estimated_api_total_usd")
             result[system] = {
                 "accuracy": values["correctness"]["accuracy"]["value"],
                 "macro_f1": values["correctness"]["macro_f1"]["value"],
@@ -483,12 +486,18 @@ class BenchmarkWorkflowManager:
                 "failure_rate": values["failures"]["rate"],
                 "p50_latency_ms": values["performance"]["warm_p50_ms"],
                 "p95_latency_ms": values["performance"]["warm_p95_ms"],
-                "total_cost_usd": values["cost"].get("provider_reported_total_usd")
-                or values["cost"].get("estimated_api_total_usd"),
-                "cost_per_1000_decisions_usd": values["cost"]["per_1000_decisions_usd"],
+                "total_cost_usd": reported_cost if reported_cost is not None else estimated_cost,
+                "cost_source": "provider_reported"
+                if reported_cost is not None
+                else "estimated"
+                if estimated_cost is not None
+                else None,
+                "cost_details": cost,
+                "cost_per_1000_decisions_usd": cost["per_1000_decisions_usd"],
                 "robustness": values["robustness"],
                 "repeatability": values["repeatability"],
                 "load_tests": values["performance"].get("load_tests", []),
+                "diagnostics": values.get("diagnostics", []),
                 "frozen_policy": values["selective_automation"]["frozen_policy"],
             }
         return result

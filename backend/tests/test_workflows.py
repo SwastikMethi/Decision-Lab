@@ -75,6 +75,44 @@ def system_metrics(accuracy):
     }
 
 
+def test_workflow_kpis_preserve_reported_zero_cost():
+    from decisionlab.workflows import BenchmarkWorkflowManager
+
+    metrics = system_metrics(0.75)
+    metrics["cost"] = {
+        "provider_reported_total_usd": 0.0,
+        "estimated_api_total_usd": 9.0,
+        "per_1000_decisions_usd": 0.0,
+        "missing_usage_requests": 0,
+        "note": "Recorded usage only.",
+    }
+
+    result = BenchmarkWorkflowManager._kpis({"systems": {"jev": metrics}})["jev"]
+
+    assert result["total_cost_usd"] == 0.0
+    assert result["cost_source"] == "provider_reported"
+    assert result["cost_details"] == metrics["cost"]
+
+
+def test_workflow_kpis_include_diagnostics():
+    from decisionlab.workflows import BenchmarkWorkflowManager
+
+    metrics = system_metrics(0.75)
+    metrics["diagnostics"] = [
+        {
+            "variant": "context_length",
+            "bucket": 4096,
+            "accuracy": 1.0,
+            "count": 1,
+            "failures": 0,
+        }
+    ]
+
+    result = BenchmarkWorkflowManager._kpis({"systems": {"jev": metrics}})["jev"]
+
+    assert result["diagnostics"] == metrics["diagnostics"]
+
+
 def complete_development(store, workflow, run_id, adapters=("jev", "laya")):
     for adapter in adapters:
         store.append(
