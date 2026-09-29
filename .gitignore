@@ -16,3 +16,4 @@ test-results/
 playwright-report/
 .DS_Store
 .codebase-memory/
+output
