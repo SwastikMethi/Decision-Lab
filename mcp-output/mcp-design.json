@@ -1,0 +1,112 @@
+{
+  "server_name": "decisionlab-mcp",
+  "tools": [
+    {
+      "name": "prepare_benchmark",
+      "description": "Prepare a durable DecisionLab benchmark from a folder's dataset.jsonl. Use first to validate data, inspect estimates, and create the review packet.",
+      "operation_ids": ["create_benchmark_workflow_api_v1_benchmark_workflows_post"],
+      "risk": "write",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "dataset_folder": {"type": "string", "description": "Folder below DECISIONLAB_DATASET_ROOT containing dataset.jsonl"},
+          "profile": {"type": "string", "enum": ["standard", "full"], "default": "standard"},
+          "publication": {"type": "boolean", "default": false}
+        },
+        "required": ["dataset_folder"]
+      },
+      "included": true
+    },
+    {
+      "name": "list_benchmarks",
+      "description": "List durable benchmark workflows and their current stages. Use to find workflow ids or see all pending work.",
+      "operation_ids": ["benchmark_workflows_api_v1_benchmark_workflows_get"],
+      "risk": "read",
+      "input_schema": {"type": "object", "properties": {}, "required": []},
+      "included": true
+    },
+    {
+      "name": "get_benchmark_status",
+      "description": "Return one benchmark's stage, estimates, review progress, active run, blocker, and next action. Use before every advance.",
+      "operation_ids": ["benchmark_workflow_api_v1_benchmark_workflows__workflow_id__get"],
+      "risk": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {"workflow_id": {"type": "string", "description": "Workflow id returned by prepare_benchmark"}},
+        "required": ["workflow_id"]
+      },
+      "included": true
+    },
+    {
+      "name": "advance_benchmark",
+      "description": "Advance one workflow by at most one live provider run. Use only after reviewing estimates; first use requires both explicit confirmations.",
+      "operation_ids": ["advance_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__advance_post"],
+      "risk": "destructive",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "workflow_id": {"type": "string", "description": "Workflow id returned by prepare_benchmark"},
+          "confirm_live_calls": {"type": "boolean", "default": false},
+          "confirm_remote_data": {"type": "boolean", "default": false}
+        },
+        "required": ["workflow_id"]
+      },
+      "included": true
+    },
+    {
+      "name": "cancel_benchmark",
+      "description": "Cancel the active run and preserve completed benchmark evidence. Use when the operator explicitly wants the workflow stopped.",
+      "operation_ids": ["cancel_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__cancel_post"],
+      "risk": "destructive",
+      "input_schema": {
+        "type": "object",
+        "properties": {"workflow_id": {"type": "string", "description": "Workflow id returned by prepare_benchmark"}},
+        "required": ["workflow_id"]
+      },
+      "included": true
+    },
+    {
+      "name": "get_benchmark_report",
+      "description": "Return the completed default and production-tuned verdicts, confidence intervals, KPI tables, and short Markdown report.",
+      "operation_ids": ["benchmark_workflow_report_api_v1_benchmark_workflows__workflow_id__report_get"],
+      "risk": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {"workflow_id": {"type": "string", "description": "Completed workflow id"}},
+        "required": ["workflow_id"]
+      },
+      "included": true
+    }
+  ],
+  "excluded": [
+    {"operation_id": "health_api_v1_health_get", "risk": "internal", "reason": "Backend diagnostic; not part of the benchmark workflow."},
+    {"operation_id": "readiness_api_v1_readiness_get", "risk": "read", "reason": "Readiness is enforced by live run creation and returned as a workflow error."},
+    {"operation_id": "datasets_api_v1_datasets_get", "risk": "read", "reason": "Raw dataset administration is owned by prepare_benchmark."},
+    {"operation_id": "upload_api_v1_datasets_validate_post", "risk": "write", "reason": "Raw dataset import would bypass workflow partitioning and path controls."},
+    {"operation_id": "dataset_api_v1_datasets__dataset_id__get", "risk": "read", "reason": "Internal dataset detail is represented in workflow status."},
+    {"operation_id": "packet_api_v1_datasets__dataset_id__review_packet_get", "risk": "read", "reason": "The workflow returns its generated review-packet path."},
+    {"operation_id": "reviews_api_v1_datasets__dataset_id__reviews_post", "risk": "write", "reason": "Review import is intentionally driven by the workflow submission file."},
+    {"operation_id": "estimate_api_v1_runs_estimate_post", "risk": "write", "reason": "All three estimates are computed during prepare_benchmark."},
+    {"operation_id": "runs_api_v1_runs_get", "risk": "read", "reason": "Raw runs are implementation details of durable workflows."},
+    {"operation_id": "start_run_api_v1_runs_post", "risk": "write", "reason": "Direct execution would bypass consent, review, and frozen-track ordering."},
+    {"operation_id": "run_api_v1_runs__run_id__get", "risk": "read", "reason": "Current run state is included in get_benchmark_status."},
+    {"operation_id": "cancel_api_v1_runs__run_id__cancel_post", "risk": "write", "reason": "Cancellation must update both the run and its workflow."},
+    {"operation_id": "rescore_api_v1_runs__run_id__rescore_post", "risk": "write", "reason": "Rescoring is outside the fixed end-to-end benchmark method."},
+    {"operation_id": "summary_api_v1_runs__run_id__summary_get", "risk": "read", "reason": "The final workflow report provides the curated KPI summary."},
+    {"operation_id": "cases_api_v1_runs__run_id__cases_get", "risk": "read", "reason": "Case inspection is available in the website and is too large for the MCP workflow surface."},
+    {"operation_id": "playback_api_v1_runs__run_id__playback_get", "risk": "read", "reason": "Live visual playback belongs to the website UI."},
+    {"operation_id": "case_detail_api_v1_runs__run_id__cases__case_id__get", "risk": "read", "reason": "Per-case inspection belongs to the website UI."},
+    {"operation_id": "chart_api_v1_runs__run_id__charts__chart_id__get", "risk": "read", "reason": "Chart payloads are website presentation details."},
+    {"operation_id": "compare_runs_api_v1_runs__run_id__comparison__other_id__get", "risk": "read", "reason": "The workflow report compares its frozen tracks directly."},
+    {"operation_id": "export_api_v1_runs__run_id__exports__format__get", "risk": "read", "reason": "Binary and large run exports are outside the concise MCP report."},
+    {"operation_id": "events_api_v1_runs__run_id__events_get", "risk": "read", "reason": "Streaming SSE is unsuitable for this polling MCP workflow."},
+    {"operation_id": "calibrations_api_v1_calibrations_get", "risk": "read", "reason": "Calibration is created and referenced automatically by the workflow."},
+    {"operation_id": "calibrate_api_v1_calibrations_post", "risk": "write", "reason": "Direct fitting could bypass the development-only invariant."},
+    {"operation_id": "calibration_api_v1_calibrations__calibration_id__get", "risk": "read", "reason": "The workflow report includes the frozen calibration id and policy KPI."},
+    {"operation_id": "protocols_api_v1_protocols_get", "risk": "read", "reason": "Protocols are internal evidence owned by the workflow."},
+    {"operation_id": "freeze_api_v1_protocols_post", "risk": "write", "reason": "Direct freezing could bypass mandatory review and paired configuration checks."},
+    {"operation_id": "protocol_api_v1_protocols__protocol_id__get", "risk": "read", "reason": "Protocol identity and release state are represented by workflow status and report."}
+  ],
+  "env": ["TARGET_API_BASE_URL", "DECISIONLAB_DATASET_ROOT"],
+  "soft_cap_exceeded": false
+}

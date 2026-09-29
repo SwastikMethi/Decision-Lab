@@ -1,0 +1,2498 @@
+{
+  "repository": "decisionlab-mcp",
+  "generated_at": "2026-09-29T11:05:24Z",
+  "source_hash": "a333806c00d6",
+  "discovery": {
+    "method": "openapi_runtime",
+    "sources": [
+      "docs/openapi.json"
+    ],
+    "confidence": "high"
+  },
+  "base_url": null,
+  "auth": [],
+  "operations": [
+    {
+      "operation_id": "health_api_v1_health_get",
+      "method": "GET",
+      "path": "/api/v1/health",
+      "summary": "Health",
+      "description": "",
+      "parameters": [],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "health_api_v1_health_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "internal",
+      "unresolved": []
+    },
+    {
+      "operation_id": "readiness_api_v1_readiness_get",
+      "method": "GET",
+      "path": "/api/v1/readiness",
+      "summary": "Readiness",
+      "description": "",
+      "parameters": [],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "readiness_api_v1_readiness_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "benchmark_workflows_api_v1_benchmark_workflows_get",
+      "method": "GET",
+      "path": "/api/v1/benchmark-workflows",
+      "summary": "Benchmark Workflows",
+      "description": "",
+      "parameters": [],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "benchmark_workflows_api_v1_benchmark_workflows_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "create_benchmark_workflow_api_v1_benchmark_workflows_post",
+      "method": "POST",
+      "path": "/api/v1/benchmark-workflows",
+      "summary": "Create Benchmark Workflow",
+      "description": "",
+      "parameters": [],
+      "request_schema": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "dataset_jsonl": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dataset Jsonl"
+          },
+          "profile": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "full"
+            ],
+            "title": "Profile",
+            "default": "standard"
+          },
+          "publication": {
+            "type": "boolean",
+            "title": "Publication",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "dataset_jsonl"
+        ],
+        "title": "BenchmarkWorkflowRequest",
+        "x-ref": "#/components/schemas/BenchmarkWorkflowRequest"
+      },
+      "response_schema": {
+        "201": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "create_benchmark_workflow_api_v1_benchmark_workflows_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "benchmark_workflow_api_v1_benchmark_workflows__workflow_id__get",
+      "method": "GET",
+      "path": "/api/v1/benchmark-workflows/{workflow_id}",
+      "summary": "Benchmark Workflow",
+      "description": "",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "benchmark_workflow_api_v1_benchmark_workflows__workflow_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "advance_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__advance_post",
+      "method": "POST",
+      "path": "/api/v1/benchmark-workflows/{workflow_id}/advance",
+      "summary": "Advance Benchmark Workflow",
+      "description": "",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": {
+        "properties": {
+          "confirm_live_calls": {
+            "type": "boolean",
+            "title": "Confirm Live Calls",
+            "default": false
+          },
+          "confirm_remote_data": {
+            "type": "boolean",
+            "title": "Confirm Remote Data",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BenchmarkAdvanceRequest",
+        "x-ref": "#/components/schemas/BenchmarkAdvanceRequest"
+      },
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "advance_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__advance_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "destructive",
+      "unresolved": []
+    },
+    {
+      "operation_id": "cancel_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__cancel_post",
+      "method": "POST",
+      "path": "/api/v1/benchmark-workflows/{workflow_id}/cancel",
+      "summary": "Cancel Benchmark Workflow",
+      "description": "",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "cancel_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__cancel_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "destructive",
+      "unresolved": []
+    },
+    {
+      "operation_id": "benchmark_workflow_report_api_v1_benchmark_workflows__workflow_id__report_get",
+      "method": "GET",
+      "path": "/api/v1/benchmark-workflows/{workflow_id}/report",
+      "summary": "Benchmark Workflow Report",
+      "description": "",
+      "parameters": [
+        {
+          "name": "workflow_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Workflow Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "benchmark_workflow_report_api_v1_benchmark_workflows__workflow_id__report_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "datasets_api_v1_datasets_get",
+      "method": "GET",
+      "path": "/api/v1/datasets",
+      "summary": "Datasets",
+      "description": "",
+      "parameters": [],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "datasets_api_v1_datasets_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "upload_api_v1_datasets_validate_post",
+      "method": "POST",
+      "path": "/api/v1/datasets/validate",
+      "summary": "Upload",
+      "description": "",
+      "parameters": [],
+      "request_schema": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_api_v1_datasets_validate_post",
+        "x-ref": "#/components/schemas/Body_upload_api_v1_datasets_validate_post"
+      },
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "upload_api_v1_datasets_validate_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "dataset_api_v1_datasets__dataset_id__get",
+      "method": "GET",
+      "path": "/api/v1/datasets/{dataset_id}",
+      "summary": "Dataset",
+      "description": "",
+      "parameters": [
+        {
+          "name": "dataset_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "dataset_api_v1_datasets__dataset_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "packet_api_v1_datasets__dataset_id__review_packet_get",
+      "method": "GET",
+      "path": "/api/v1/datasets/{dataset_id}/review-packet",
+      "summary": "Packet",
+      "description": "",
+      "parameters": [
+        {
+          "name": "dataset_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "packet_api_v1_datasets__dataset_id__review_packet_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "reviews_api_v1_datasets__dataset_id__reviews_post",
+      "method": "POST",
+      "path": "/api/v1/datasets/{dataset_id}/reviews",
+      "summary": "Reviews",
+      "description": "",
+      "parameters": [
+        {
+          "name": "dataset_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": {
+        "properties": {
+          "reviews": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "maxItems": 10000,
+            "minItems": 1,
+            "title": "Reviews"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reviews"
+        ],
+        "title": "ReviewRequest",
+        "x-ref": "#/components/schemas/ReviewRequest"
+      },
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "reviews_api_v1_datasets__dataset_id__reviews_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "estimate_api_v1_runs_estimate_post",
+      "method": "POST",
+      "path": "/api/v1/runs/estimate",
+      "summary": "Estimate",
+      "description": "",
+      "parameters": [],
+      "request_schema": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name",
+            "default": "Paired evaluation"
+          },
+          "track": {
+            "type": "string",
+            "enum": [
+              "default",
+              "production-tuned"
+            ],
+            "title": "Track",
+            "default": "default"
+          },
+          "dataset_ref": {
+            "type": "string",
+            "title": "Dataset Ref"
+          },
+          "dataset_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Digest"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 20260924
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "live",
+              "fake"
+            ],
+            "title": "Mode",
+            "default": "live"
+          },
+          "systems": {
+            "$ref": "#/components/schemas/Systems"
+          },
+          "suites": {
+            "$ref": "#/components/schemas/Suites"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/MetricConfiguration"
+          },
+          "calibration_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Id"
+          },
+          "protocol_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Protocol Id"
+          },
+          "publication": {
+            "type": "boolean",
+            "title": "Publication",
+            "default": false
+          },
+          "acknowledge_remote": {
+            "type": "boolean",
+            "title": "Acknowledge Remote",
+            "default": false
+          },
+          "instruction_overrides": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Instruction Overrides"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dataset_ref"
+        ],
+        "title": "RunConfiguration",
+        "x-ref": "#/components/schemas/RunConfiguration"
+      },
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "estimate_api_v1_runs_estimate_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "runs_api_v1_runs_get",
+      "method": "GET",
+      "path": "/api/v1/runs",
+      "summary": "Runs",
+      "description": "",
+      "parameters": [
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "title": "Page"
+          },
+          "description": ""
+        },
+        {
+          "name": "page_size",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "maximum": 500,
+            "minimum": 1,
+            "default": 50,
+            "title": "Page Size"
+          },
+          "description": ""
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "description": ""
+        },
+        {
+          "name": "track",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Track"
+          },
+          "description": ""
+        },
+        {
+          "name": "dataset",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "runs_api_v1_runs_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "start_run_api_v1_runs_post",
+      "method": "POST",
+      "path": "/api/v1/runs",
+      "summary": "Start Run",
+      "description": "",
+      "parameters": [],
+      "request_schema": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name",
+            "default": "Paired evaluation"
+          },
+          "track": {
+            "type": "string",
+            "enum": [
+              "default",
+              "production-tuned"
+            ],
+            "title": "Track",
+            "default": "default"
+          },
+          "dataset_ref": {
+            "type": "string",
+            "title": "Dataset Ref"
+          },
+          "dataset_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dataset Digest"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 20260924
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "live",
+              "fake"
+            ],
+            "title": "Mode",
+            "default": "live"
+          },
+          "systems": {
+            "$ref": "#/components/schemas/Systems"
+          },
+          "suites": {
+            "$ref": "#/components/schemas/Suites"
+          },
+          "metrics": {
+            "$ref": "#/components/schemas/MetricConfiguration"
+          },
+          "calibration_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Id"
+          },
+          "protocol_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Protocol Id"
+          },
+          "publication": {
+            "type": "boolean",
+            "title": "Publication",
+            "default": false
+          },
+          "acknowledge_remote": {
+            "type": "boolean",
+            "title": "Acknowledge Remote",
+            "default": false
+          },
+          "instruction_overrides": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Instruction Overrides"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dataset_ref"
+        ],
+        "title": "RunConfiguration",
+        "x-ref": "#/components/schemas/RunConfiguration"
+      },
+      "response_schema": {
+        "202": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "start_run_api_v1_runs_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "run_api_v1_runs__run_id__get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}",
+      "summary": "Run",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "run_api_v1_runs__run_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "cancel_api_v1_runs__run_id__cancel_post",
+      "method": "POST",
+      "path": "/api/v1/runs/{run_id}/cancel",
+      "summary": "Cancel",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "cancel_api_v1_runs__run_id__cancel_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "rescore_api_v1_runs__run_id__rescore_post",
+      "method": "POST",
+      "path": "/api/v1/runs/{run_id}/rescore",
+      "summary": "Rescore",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": {
+        "properties": {
+          "scoring_version": {
+            "type": "string",
+            "title": "Scoring Version",
+            "default": "1.0.0"
+          }
+        },
+        "type": "object",
+        "title": "RescoreRequest",
+        "x-ref": "#/components/schemas/RescoreRequest"
+      },
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "rescore_api_v1_runs__run_id__rescore_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "summary_api_v1_runs__run_id__summary_get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/summary",
+      "summary": "Summary",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "domain",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "description": ""
+        },
+        {
+          "name": "primitive",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primitive"
+          },
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant"
+          },
+          "description": ""
+        },
+        {
+          "name": "split",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Split"
+          },
+          "description": ""
+        },
+        {
+          "name": "disagreement",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disagreement"
+          },
+          "description": ""
+        },
+        {
+          "name": "jev_correct",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jev Correct"
+          },
+          "description": ""
+        },
+        {
+          "name": "laya_correct",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Laya Correct"
+          },
+          "description": ""
+        },
+        {
+          "name": "confidence_min",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "maximum": 1,
+            "minimum": 0,
+            "default": 0,
+            "title": "Confidence Min"
+          },
+          "description": ""
+        },
+        {
+          "name": "confidence_max",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "maximum": 1,
+            "minimum": 0,
+            "default": 1,
+            "title": "Confidence Max"
+          },
+          "description": ""
+        },
+        {
+          "name": "error_category",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Category"
+          },
+          "description": ""
+        },
+        {
+          "name": "q",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 500,
+            "default": "",
+            "title": "Q"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "summary_api_v1_runs__run_id__summary_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "cases_api_v1_runs__run_id__cases_get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/cases",
+      "summary": "Cases",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "title": "Page"
+          },
+          "description": ""
+        },
+        {
+          "name": "page_size",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "maximum": 500,
+            "minimum": 1,
+            "default": 50,
+            "title": "Page Size"
+          },
+          "description": ""
+        },
+        {
+          "name": "domain",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "description": ""
+        },
+        {
+          "name": "primitive",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primitive"
+          },
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant"
+          },
+          "description": ""
+        },
+        {
+          "name": "split",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Split"
+          },
+          "description": ""
+        },
+        {
+          "name": "disagreement",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disagreement"
+          },
+          "description": ""
+        },
+        {
+          "name": "jev_correct",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jev Correct"
+          },
+          "description": ""
+        },
+        {
+          "name": "laya_correct",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Laya Correct"
+          },
+          "description": ""
+        },
+        {
+          "name": "confidence_min",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "maximum": 1,
+            "minimum": 0,
+            "default": 0,
+            "title": "Confidence Min"
+          },
+          "description": ""
+        },
+        {
+          "name": "confidence_max",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "maximum": 1,
+            "minimum": 0,
+            "default": 1,
+            "title": "Confidence Max"
+          },
+          "description": ""
+        },
+        {
+          "name": "error_category",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Category"
+          },
+          "description": ""
+        },
+        {
+          "name": "q",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 500,
+            "default": "",
+            "title": "Q"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "cases_api_v1_runs__run_id__cases_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "playback_api_v1_runs__run_id__playback_get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/playback",
+      "summary": "Playback",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "after",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": -1,
+            "default": -1,
+            "title": "After"
+          },
+          "description": ""
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "maximum": 100,
+            "minimum": 1,
+            "default": 20,
+            "title": "Limit"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "properties": {
+            "items": {
+              "items": {
+                "$ref": "#/components/schemas/PlaybackFrame"
+              },
+              "type": "array",
+              "title": "Items"
+            },
+            "next_cursor": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Next Cursor"
+            },
+            "total_frames": {
+              "type": "integer",
+              "title": "Total Frames"
+            },
+            "withheld_frames": {
+              "type": "integer",
+              "title": "Withheld Frames"
+            },
+            "latest_available": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Latest Available"
+            },
+            "run_status": {
+              "type": "string",
+              "title": "Run Status"
+            }
+          },
+          "type": "object",
+          "required": [
+            "items",
+            "next_cursor",
+            "total_frames",
+            "withheld_frames",
+            "latest_available",
+            "run_status"
+          ],
+          "title": "PlaybackPage",
+          "x-ref": "#/components/schemas/PlaybackPage"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "playback_api_v1_runs__run_id__playback_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "case_detail_api_v1_runs__run_id__cases__case_id__get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/cases/{case_id}",
+      "summary": "Case Detail",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "case_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Case Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "case_detail_api_v1_runs__run_id__cases__case_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "chart_api_v1_runs__run_id__charts__chart_id__get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/charts/{chart_id}",
+      "summary": "Chart",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "chart_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Chart Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "domain",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "description": ""
+        },
+        {
+          "name": "primitive",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primitive"
+          },
+          "description": ""
+        },
+        {
+          "name": "variant",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Variant"
+          },
+          "description": ""
+        },
+        {
+          "name": "split",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Split"
+          },
+          "description": ""
+        },
+        {
+          "name": "disagreement",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disagreement"
+          },
+          "description": ""
+        },
+        {
+          "name": "jev_correct",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jev Correct"
+          },
+          "description": ""
+        },
+        {
+          "name": "laya_correct",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Laya Correct"
+          },
+          "description": ""
+        },
+        {
+          "name": "confidence_min",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "maximum": 1,
+            "minimum": 0,
+            "default": 0,
+            "title": "Confidence Min"
+          },
+          "description": ""
+        },
+        {
+          "name": "confidence_max",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "number",
+            "maximum": 1,
+            "minimum": 0,
+            "default": 1,
+            "title": "Confidence Max"
+          },
+          "description": ""
+        },
+        {
+          "name": "error_category",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Category"
+          },
+          "description": ""
+        },
+        {
+          "name": "q",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "maxLength": 500,
+            "default": "",
+            "title": "Q"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "chart_api_v1_runs__run_id__charts__chart_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "compare_runs_api_v1_runs__run_id__comparison__other_id__get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/comparison/{other_id}",
+      "summary": "Compare Runs",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "other_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Other Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "compare_runs_api_v1_runs__run_id__comparison__other_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "export_api_v1_runs__run_id__exports__format__get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/exports/{format}",
+      "summary": "Export",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "format",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Format"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "export_api_v1_runs__run_id__exports__format__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "events_api_v1_runs__run_id__events_get",
+      "method": "GET",
+      "path": "/api/v1/runs/{run_id}/events",
+      "summary": "Events",
+      "description": "",
+      "parameters": [
+        {
+          "name": "run_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "description": ""
+        },
+        {
+          "name": "after",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "title": "After"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "events_api_v1_runs__run_id__events_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "calibrations_api_v1_calibrations_get",
+      "method": "GET",
+      "path": "/api/v1/calibrations",
+      "summary": "Calibrations",
+      "description": "",
+      "parameters": [],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "calibrations_api_v1_calibrations_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "calibrate_api_v1_calibrations_post",
+      "method": "POST",
+      "path": "/api/v1/calibrations",
+      "summary": "Calibrate",
+      "description": "",
+      "parameters": [],
+      "request_schema": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "title": "CalibrationRequest",
+        "x-ref": "#/components/schemas/CalibrationRequest"
+      },
+      "response_schema": {
+        "201": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "calibrate_api_v1_calibrations_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "calibration_api_v1_calibrations__calibration_id__get",
+      "method": "GET",
+      "path": "/api/v1/calibrations/{calibration_id}",
+      "summary": "Calibration",
+      "description": "",
+      "parameters": [
+        {
+          "name": "calibration_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Calibration Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "calibration_api_v1_calibrations__calibration_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "protocols_api_v1_protocols_get",
+      "method": "GET",
+      "path": "/api/v1/protocols",
+      "summary": "Protocols",
+      "description": "",
+      "parameters": [],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "protocols_api_v1_protocols_get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    },
+    {
+      "operation_id": "freeze_api_v1_protocols_post",
+      "method": "POST",
+      "path": "/api/v1/protocols",
+      "summary": "Freeze",
+      "description": "",
+      "parameters": [],
+      "request_schema": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "configurations": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/RunConfiguration"
+            },
+            "type": "object",
+            "title": "Configurations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "configurations"
+        ],
+        "title": "ProtocolRequest",
+        "x-ref": "#/components/schemas/ProtocolRequest"
+      },
+      "response_schema": {
+        "201": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "freeze_api_v1_protocols_post",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "write",
+      "unresolved": []
+    },
+    {
+      "operation_id": "protocol_api_v1_protocols__protocol_id__get",
+      "method": "GET",
+      "path": "/api/v1/protocols/{protocol_id}",
+      "summary": "Protocol",
+      "description": "",
+      "parameters": [
+        {
+          "name": "protocol_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "title": "Protocol Id"
+          },
+          "description": ""
+        }
+      ],
+      "request_schema": null,
+      "response_schema": {
+        "200": {
+          "description": "Successful Response"
+        },
+        "422": {
+          "properties": {
+            "detail": {
+              "items": {
+                "$ref": "#/components/schemas/ValidationError"
+              },
+              "type": "array",
+              "title": "Detail"
+            }
+          },
+          "type": "object",
+          "title": "HTTPValidationError",
+          "x-ref": "#/components/schemas/HTTPValidationError"
+        }
+      },
+      "auth": [],
+      "source": {
+        "kind": "openapi",
+        "path": "docs/openapi.json",
+        "symbol": "protocol_api_v1_protocols__protocol_id__get",
+        "line": null
+      },
+      "confidence": "high",
+      "risk": "read",
+      "unresolved": []
+    }
+  ],
+  "diagnostics": []
+}
