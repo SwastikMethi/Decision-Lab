@@ -2,7 +2,6 @@
 import httpx
 import pytest
 import respx
-
 from repo_mcp.api_client import ApiClient, ApiError, assert_safe_destination, get_client, redact
 
 BASE = "http://127.0.0.1:8000"  # must match conftest._env

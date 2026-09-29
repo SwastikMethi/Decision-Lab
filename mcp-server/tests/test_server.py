@@ -1,6 +1,5 @@
 """The server imports, loads tools, and lists them through the SDK's in-memory client."""
 from mcp import Client
-
 from repo_mcp import server
 
 
@@ -17,7 +16,6 @@ async def test_tools_are_registered_and_listable():
 
 async def test_api_error_reaches_the_model_unmasked(monkeypatch):
     """mcp 2.x masks non-ToolError exceptions as 'Error executing tool X'. ApiError must not be masked."""
-    from repo_mcp import api_client
     from repo_mcp.api_client import ApiError
 
     server.load_tools()

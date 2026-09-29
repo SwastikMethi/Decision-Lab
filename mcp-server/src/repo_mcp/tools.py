@@ -7,7 +7,6 @@ from pydantic import Field
 from .api_client import get_client
 from .server import mcp
 
-
 WorkflowId = Annotated[
     str, Field(min_length=1, description="Workflow id returned by prepare_benchmark")
 ]

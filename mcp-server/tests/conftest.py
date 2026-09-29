@@ -1,5 +1,4 @@
 import pytest
-
 from repo_mcp import api_client, config
 
 BASE = "http://127.0.0.1:8000"
