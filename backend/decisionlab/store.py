@@ -30,7 +30,14 @@ class Store:
         self.root = Path(root).resolve()
         self.lock = threading.RLock()
         self.event_ids = {}
-        for directory in ("datasets", "runs", "calibrations", "protocols", "reviews"):
+        for directory in (
+            "datasets",
+            "runs",
+            "calibrations",
+            "protocols",
+            "reviews",
+            "workflows",
+        ):
             (self.root / directory).mkdir(parents=True, exist_ok=True)
         development, evaluation = build_datasets()
         for name, cases in (("demo", development), ("benchmark", evaluation)):
