@@ -1,6 +1,6 @@
 # DecisionLab
 
-Run the same typed decisions through hosted Jev and local Laya, inspect their evidence, and export a reproducible comparison. The workspace covers Choice, Noul, Score, calibration, selective automation, robustness, repeatability, latency, cost, and failures.
+Run the same typed decisions through hosted Jev and local Laya, inspect their evidence, and export a reproducible comparison. Use the web workspace or drive the full guarded evaluation from Codex or Claude Code through the included MCP server. DecisionLab covers Choice, Noul, Score, calibration, selective automation, robustness, repeatability, latency, cost, and failures.
 
 ## Start locally
 
@@ -95,15 +95,56 @@ npm run types:api
 
 ## MCP benchmark runner
 
-The project includes a local MCP server that runs the complete DecisionLab methodology from a folder containing `dataset.jsonl`. The backend owns durable progress; closing the MCP client does not lose workflow state.
+The local MCP server lets Codex or Claude Code run the complete DecisionLab methodology from a dataset folder. It uses the same backend, review gates, frozen configurations, metrics, and reports as the web workspace. The backend owns durable progress, so closing the MCP client does not lose workflow state.
 
-For a one-command installation and free smoke test, run:
+### Quick start with the bundled dataset
+
+From the repository root, run:
 
 ```sh
-./install-mcp.sh
+./install-mcp.sh sample-datasets customer-support-full
+source .cache/decisionlab-mcp/env.sh
+codex
 ```
 
-This installs dependencies, runs the offline suites, starts DecisionLab on port 8879, verifies all six MCP tools, and prepares the bundled sample without provider calls. To use your own data, pass its absolute root and child folder: `./install-mcp.sh /absolute/path/to/datasets support-routing`. The script prints the environment file to source before opening Codex and supports `./install-mcp.sh --stop` for its background backend.
+Then ask Codex:
+
+```text
+Use the decisionlab-mcp tools to run a standard comparison on the
+customer-support-full dataset. Show me the request estimates before asking
+for approval, guide me through the review step, and summarize the final KPIs.
+```
+
+The installer installs dependencies, runs the offline backend, MCP, and frontend checks, starts an isolated DecisionLab backend on port 8879, verifies all six MCP tools, and prepares the dataset without making provider calls. Live Jev or Laya execution begins only after the MCP client sends both explicit confirmation flags. Stop the installer-managed backend with `./install-mcp.sh --stop`.
+
+To use your own data, place `dataset.jsonl` in a named child folder and pass both names to the installer:
+
+```text
+/absolute/path/to/evaluation-datasets/
+└── support-routing/
+    └── dataset.jsonl
+```
+
+```sh
+./install-mcp.sh /absolute/path/to/evaluation-datasets support-routing
+source .cache/decisionlab-mcp/env.sh
+codex
+```
+
+Use [`sample-datasets/customer-support-full/dataset.jsonl`](sample-datasets/customer-support-full/dataset.jsonl) as a working format example. Inputs must be UTF-8 JSONL, no larger than 25 MiB, and must pass DecisionLab's label, family, transformation, and probability-mapping validation.
+
+### Available MCP tools
+
+| Tool | Purpose |
+|---|---|
+| `prepare_benchmark` | Validate and partition a dataset, estimate requests, and create the blind-review packet. |
+| `list_benchmarks` | List durable benchmark workflows. |
+| `get_benchmark_status` | Return progress, estimates, blockers, review state, and the next action. |
+| `advance_benchmark` | Advance one step and start at most one provider run; the first live advance requires both consent flags. |
+| `cancel_benchmark` | Stop active work while retaining completed evidence. |
+| `get_benchmark_report` | Return verdicts, paired confidence intervals, calibration, failures, latency, cost, robustness, and Markdown. |
+
+### Manual configuration
 
 Start DecisionLab first. Keep `TYPESAFE_API_KEY` and all provider configuration only in that backend process:
 
