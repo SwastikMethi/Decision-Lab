@@ -1,0 +1,35 @@
+{
+  "status": "passed_with_warnings",
+  "repository": "decisionlab-mcp",
+  "generated_at": "2026-09-29T12:45:37Z",
+  "discovery": {
+    "method": "openapi_runtime",
+    "operations": 33,
+    "coverage": "complete"
+  },
+  "mcp": {
+    "tools_generated": 6,
+    "tools_excluded": 27,
+    "transport": "stdio"
+  },
+  "verification": {
+    "backend_tests_passed": 73,
+    "mcp_tests_passed": 29,
+    "frontend_tests_passed": 6,
+    "failed": 0,
+    "skipped": 2,
+    "frontend_build": "passed",
+    "backend_lint_and_format": "passed",
+    "python_type_check": "passed",
+    "openapi_inventory_and_configs": "passed"
+  },
+  "warnings": [
+    "advance_benchmark and cancel_benchmark were not invoked through Inspector because they are destructive tools.",
+    "No live Jev or Laya provider calls were made during verification."
+  ],
+  "manual_actions": [
+    "Set DECISIONLAB_DATASET_ROOT and place each benchmark in a folder containing dataset.jsonl.",
+    "Start the DecisionLab backend on http://127.0.0.1:8768 before using the MCP server.",
+    "Review estimates and the blind-review packet before confirming any live provider calls."
+  ]
+}

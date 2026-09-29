@@ -33,6 +33,16 @@ Passed 15, failed 0, skipped 2.
 - ✓ **claude mcp list shows decisionlab-mcp (pending approval)**
 - ✓ **codex mcp list shows decisionlab-mcp (listed)**
 
+## Final repository checks
+
+- ✓ **backend test suite (73 passed)**
+- ✓ **MCP unit suite (29 passed)**
+- ✓ **frontend unit suite (6 passed)**
+- ✓ **frontend production build**
+- ✓ **backend Ruff check and format check**
+- ✓ **backend and MCP source mypy check**
+- ✓ **OpenAPI snapshot, 33-operation inventory, design coverage, and client configs**
+
 ## Skipped tests and reasons
 
 - – **tools/call advance_benchmark**
