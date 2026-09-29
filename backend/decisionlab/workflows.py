@@ -79,7 +79,12 @@ class BenchmarkWorkflowManager:
             encode_cases(evaluation), f"{name} — evaluation", dataset_ids["evaluation"]
         )
         development_config = self._configuration(
-            workflow_id, name, "development", dataset_ids["development"], "standard", publication=False
+            workflow_id,
+            name,
+            "development",
+            dataset_ids["development"],
+            "standard",
+            publication=False,
         )
         default_preview = self._configuration(
             workflow_id, name, "default", dataset_ids["evaluation"], profile, publication
@@ -204,12 +209,12 @@ class BenchmarkWorkflowManager:
                 if not submission.exists():
                     return self._status(workflow)
                 raw_reviews = self.store.read_json(submission)
-                reviews = raw_reviews.get("reviews") if isinstance(raw_reviews, dict) else raw_reviews
+                reviews = (
+                    raw_reviews.get("reviews") if isinstance(raw_reviews, dict) else raw_reviews
+                )
                 if not isinstance(reviews, list) or not reviews:
                     raise ValueError("Review submission must be a non-empty JSON array")
-                status = import_reviews(
-                    self.store, workflow["datasets"]["evaluation"], reviews
-                )
+                status = import_reviews(self.store, workflow["datasets"]["evaluation"], reviews)
                 workflow["review"].update(status)
                 if not status["complete"]:
                     self._save(workflow)
@@ -264,9 +269,7 @@ class BenchmarkWorkflowManager:
 
     def _find_run(self, workflow, phase):
         name = self._run_name(workflow["workflow_id"], workflow["name"], phase)
-        return next(
-            (run["run_id"] for run in self.store.runs() if run.get("name") == name), None
-        )
+        return next((run["run_id"] for run in self.store.runs() if run.get("name") == name), None)
 
     def _fit_calibration(self, workflow, run_id):
         calibration_id = f"{workflow['workflow_id']}-calibration"
@@ -304,9 +307,7 @@ class BenchmarkWorkflowManager:
         if existing:
             protocol = existing
         else:
-            development = self.store.manifest(workflow["runs"]["development"])[
-                "effective_config"
-            ]
+            development = self.store.manifest(workflow["runs"]["development"])["effective_config"]
             revision = development["systems"]["laya"]["checkpoint_revision"]
             default = self._configuration(
                 workflow["workflow_id"],
@@ -368,16 +369,18 @@ class BenchmarkWorkflowManager:
                 "context_length": True,
                 "option_cardinality": True,
             }
-        return RunConfiguration(
-            name=self._run_name(workflow_id, name, phase),
-            track=track,
-            dataset_ref=dataset_id,
-            mode="live",
-            acknowledge_remote=True,
-            publication=publication,
-            calibration_id=calibration_id,
-            systems={"laya": {"checkpoint_revision": revision}},
-            suites=suites,
+        return RunConfiguration.model_validate(
+            {
+                "name": self._run_name(workflow_id, name, phase),
+                "track": track,
+                "dataset_ref": dataset_id,
+                "mode": "live",
+                "acknowledge_remote": True,
+                "publication": publication,
+                "calibration_id": calibration_id,
+                "systems": {"laya": {"checkpoint_revision": revision}},
+                "suites": suites,
+            }
         )
 
     @staticmethod
@@ -481,9 +484,7 @@ class BenchmarkWorkflowManager:
                 "progress": manifest["progress"],
             }
         if workflow["stage"] == "waiting_for_review":
-            workflow["review"].update(
-                review_status(self.store, workflow["datasets"]["evaluation"])
-            )
+            workflow["review"].update(review_status(self.store, workflow["datasets"]["evaluation"]))
         workflow["next_action"] = {
             "prepared": "Confirm live calls and remote data to start development",
             "development_running": "Wait for development to finish, then advance",

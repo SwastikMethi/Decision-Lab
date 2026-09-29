@@ -163,9 +163,7 @@ async def test_workflow_pauses_for_review_then_completes_both_tracks(tmp_path):
     manager = BenchmarkWorkflowManager(store, runner)
     workflow = manager.create("Routing benchmark", dataset_bytes(*workflow_cases()))
     workflow_id = workflow["workflow_id"]
-    started = await manager.advance(
-        workflow_id, confirm_live_calls=True, confirm_remote_data=True
-    )
+    started = await manager.advance(workflow_id, confirm_live_calls=True, confirm_remote_data=True)
     dev_run = started["runs"]["development"]
     complete_development(store, workflow, dev_run)
 
@@ -242,13 +240,16 @@ async def test_failed_run_blocks_reruns_and_cancel_preserves_run(tmp_path):
 def test_accuracy_verdict_requires_confidence_interval_to_exclude_zero(interval, winner):
     from decisionlab.workflows import comparison_verdict
 
-    assert comparison_verdict(
-        {
-            "metric": "accuracy",
-            "left": "jev-default",
-            "right": "laya-default",
-            "difference": 0.04,
-            "ci95": interval,
-            "families": 10,
-        }
-    )["winner"] == winner
+    assert (
+        comparison_verdict(
+            {
+                "metric": "accuracy",
+                "left": "jev-default",
+                "right": "laya-default",
+                "difference": 0.04,
+                "ci95": interval,
+                "families": 10,
+            }
+        )["winner"]
+        == winner
+    )

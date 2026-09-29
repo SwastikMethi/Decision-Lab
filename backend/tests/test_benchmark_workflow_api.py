@@ -30,9 +30,11 @@ def test_workflow_api_prepares_lists_gets_and_cancels(tmp_path):
         listing = client.get("/api/v1/benchmark-workflows").json()
         assert listing["total"] == 1
         assert listing["items"][0]["workflow_id"] == workflow_id
-        assert client.get(f"/api/v1/benchmark-workflows/{workflow_id}").json()[
-            "next_action"
-        ].startswith("Confirm")
+        assert (
+            client.get(f"/api/v1/benchmark-workflows/{workflow_id}")
+            .json()["next_action"]
+            .startswith("Confirm")
+        )
 
         cancelled = client.post(f"/api/v1/benchmark-workflows/{workflow_id}/cancel")
         assert cancelled.status_code == 200
@@ -55,9 +57,7 @@ def test_workflow_api_validates_dataset_consent_and_report_state(tmp_path):
             "/api/v1/benchmark-workflows",
             json={"name": "Support routing", "dataset_jsonl": dataset_jsonl()},
         ).json()["workflow_id"]
-        advance = client.post(
-            f"/api/v1/benchmark-workflows/{workflow_id}/advance", json={}
-        )
+        advance = client.post(f"/api/v1/benchmark-workflows/{workflow_id}/advance", json={})
         assert advance.status_code == 400
         assert "confirm" in advance.json()["detail"].lower()
         unavailable = client.get(f"/api/v1/benchmark-workflows/{workflow_id}/report")
@@ -92,9 +92,7 @@ def test_workflow_api_returns_structured_no_clear_winner_report(tmp_path):
         }
         app.state.store.write_json(record["report_path"], expected)
 
-        response = client.get(
-            f"/api/v1/benchmark-workflows/{prepared['workflow_id']}/report"
-        )
+        response = client.get(f"/api/v1/benchmark-workflows/{prepared['workflow_id']}/report")
         assert response.status_code == 200
         assert response.json() == expected
 
