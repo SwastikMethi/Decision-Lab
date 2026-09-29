@@ -1,0 +1,1557 @@
+{
+  "workflow_id": "01a0edc3-58bd-71d4-9a4d-3ea0ee4c1d51",
+  "dataset_digest": "sha256:6590eee0f179d59c27467583c2ce07d7b77b5d9c5fb96015a90fbd4be9bdd974",
+  "profile": "full",
+  "generated_at": "2026-09-29T15:48:59.743058+00:00",
+  "default": {
+    "winner": "jev",
+    "accuracy_difference": 0.4166666666666667,
+    "ci95": [
+      0.16666666666666666,
+      0.6666666666666666
+    ],
+    "families": 6,
+    "left": "jev-default",
+    "right": "laya-default",
+    "systems": {
+      "jev-default": {
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "brier": 0.0012666666666666677,
+        "ece": 0.01750000000000007,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "p50_latency_ms": 314.27533307578415,
+        "p95_latency_ms": 985.4971913155164,
+        "total_cost_usd": 0.012284076000000001,
+        "cost_source": "estimated",
+        "cost_details": {
+          "provider_reported_total_usd": null,
+          "estimated_api_total_usd": 0.012284076000000001,
+          "observed_requests": 246,
+          "reported_cost_count": 0,
+          "observed_questions": 2478,
+          "missing_usage_requests": 0,
+          "unpriced_failed_attempts": 0,
+          "note": "Recorded usage only; failed attempts without usage may incur additional cost. Warm-up is reported separately.",
+          "estimated_cost_count": 246,
+          "per_1000_decisions_usd": 0.004957254237288136,
+          "warmup_estimated_api_usd": 0.000441336,
+          "warmup_usage_complete": true
+        },
+        "cost_per_1000_decisions_usd": 0.004957254237288136,
+        "robustness": [
+          {
+            "variant": "paraphrase",
+            "primitive": "choice",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": 0.0,
+            "probability_drift": {
+              "value": 0.0,
+              "numerator": 0.0,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-choice-03-paraphrase",
+              "customer_support-choice-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "noul",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": 0.0,
+            "probability_drift": {
+              "value": 0.0006167533373614706,
+              "numerator": 0.0012335066747229412,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-noul-03-paraphrase",
+              "customer_support-noul-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "score",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": 0.0,
+            "probability_drift": {
+              "value": 0.0001204071947628841,
+              "numerator": 0.0002408143895257682,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-score-03-paraphrase",
+              "customer_support-score-04-paraphrase"
+            ]
+          }
+        ],
+        "repeatability": [
+          {
+            "case_id": "customer_support-choice-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.004898979485566361,
+            "max_probability_std": 0.004898979485566361,
+            "mean_js_divergence": 0.0005173113562839829
+          },
+          {
+            "case_id": "customer_support-noul-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0040000000000000036,
+            "max_probability_std": 0.0040000000000000036,
+            "mean_js_divergence": 0.00034487423752265525
+          },
+          {
+            "case_id": "customer_support-noul-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.00421637021355784,
+            "max_probability_std": 0.006324555320336764,
+            "mean_js_divergence": 0.00026561751271187496
+          },
+          {
+            "case_id": "customer_support-score-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0032659863237108886,
+            "max_probability_std": 0.00489897948556636,
+            "mean_js_divergence": 0.0001235201057101713
+          }
+        ],
+        "load_tests": [
+          {
+            "concurrency": 1,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 2.866668401913457,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 14.966012237533196,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 29.185761317230373,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 133.6041039458453,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 9.466537365736809,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 52.49399097504213,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 93.46596783969765,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 513.4305483723876,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 6.8220309278769715,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 68.42747047980865,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 144.746428837445,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 691.1995992189824,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          }
+        ],
+        "diagnostics": [
+          {
+            "variant": "context_length",
+            "bucket": 1024,
+            "accuracy": 1.0,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 4096,
+            "accuracy": 1.0,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 16384,
+            "accuracy": 1.0,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 2,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 4,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 10,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 20,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 50,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 75,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          }
+        ],
+        "frozen_policy": null
+      },
+      "laya-default": {
+        "accuracy": 0.5833333333333334,
+        "macro_f1": 0.8333333333333333,
+        "brier": 0.217113939,
+        "ece": 0.16122000000000006,
+        "failure_count": 2,
+        "failure_rate": 0.16666666666666666,
+        "p50_latency_ms": 43.60074992291629,
+        "p95_latency_ms": 56.65767736500129,
+        "total_cost_usd": null,
+        "cost_source": null,
+        "cost_details": {
+          "provider_reported_total_usd": null,
+          "estimated_api_total_usd": null,
+          "observed_requests": 246,
+          "reported_cost_count": 0,
+          "observed_questions": 2478,
+          "missing_usage_requests": 0,
+          "unpriced_failed_attempts": 61,
+          "note": "Recorded usage only; failed attempts without usage may incur additional cost. Warm-up is reported separately.",
+          "estimated_cost_count": 0,
+          "per_1000_decisions_usd": null
+        },
+        "cost_per_1000_decisions_usd": null,
+        "robustness": [
+          {
+            "variant": "paraphrase",
+            "primitive": "choice",
+            "count": 2,
+            "comparable_count": 1,
+            "missing_pairs": 1,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.5,
+            "accuracy_delta": 0.5,
+            "probability_drift": {
+              "value": 0.0006310959982356278,
+              "numerator": 0.0006310959982356278,
+              "denominator": 1,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-choice-03-paraphrase",
+              "customer_support-choice-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "noul",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.5,
+            "harmful_flip_rate": 0.5,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": -0.5,
+            "probability_drift": {
+              "value": 0.01876810865506219,
+              "numerator": 0.03753621731012438,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-noul-03-paraphrase",
+              "customer_support-noul-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "score",
+            "count": 2,
+            "comparable_count": 1,
+            "missing_pairs": 1,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.5,
+            "accuracy_delta": 0.5,
+            "probability_drift": {
+              "value": 0.0008841480901083227,
+              "numerator": 0.0008841480901083227,
+              "denominator": 1,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-score-03-paraphrase",
+              "customer_support-score-04-paraphrase"
+            ]
+          }
+        ],
+        "repeatability": [
+          {
+            "case_id": "customer_support-choice-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 9.25185853854297E-18,
+            "max_probability_std": 2.7755575615628914E-17,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 1.3877787807814457E-17,
+            "max_probability_std": 2.7755575615628914E-17,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-04-base",
+            "calls": 5,
+            "valid": 0,
+            "modal_agreement": null,
+            "any_flip": null,
+            "mean_probability_std": null,
+            "max_probability_std": null,
+            "mean_js_divergence": null
+          },
+          {
+            "case_id": "customer_support-choice-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 3.700743415417188E-17,
+            "max_probability_std": 1.1102230246251565E-16,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-03-base",
+            "calls": 5,
+            "valid": 0,
+            "modal_agreement": null,
+            "any_flip": null,
+            "mean_probability_std": null,
+            "max_probability_std": null,
+            "mean_js_divergence": null
+          },
+          {
+            "case_id": "customer_support-score-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 3.700743415417188E-17,
+            "max_probability_std": 1.1102230246251565E-16,
+            "mean_js_divergence": 0.0
+          }
+        ],
+        "load_tests": [
+          {
+            "concurrency": 1,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 6.095179044411849,
+            "failures": 2,
+            "queue_p50_ms": 0.002499902620911598
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 21.665919956581764,
+            "failures": 4,
+            "queue_p50_ms": 0.00231259036809206
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 29.073543779695722,
+            "failures": 4,
+            "queue_p50_ms": 0.002354034222662449
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 65.57809122954517,
+            "failures": 4,
+            "queue_p50_ms": 0.002937507815659046
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 15.69334958013168,
+            "failures": 2,
+            "queue_p50_ms": 166.05633299332112
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 44.57261635967799,
+            "failures": 4,
+            "queue_p50_ms": 324.59866639692336
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 57.17315982402194,
+            "failures": 4,
+            "queue_p50_ms": 498.3095210045576
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 75.65335801378815,
+            "failures": 4,
+            "queue_p50_ms": 1801.6761250328273
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 8.103908248664784,
+            "failures": 2,
+            "queue_p50_ms": 859.4455000711605
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 35.40441662142487,
+            "failures": 4,
+            "queue_p50_ms": 634.9351045209914
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 49.696354650327535,
+            "failures": 4,
+            "queue_p50_ms": 1068.012916482985
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 50.89225571420023,
+            "failures": 4,
+            "queue_p50_ms": 5456.445166841149
+          }
+        ],
+        "diagnostics": [
+          {
+            "variant": "context_length",
+            "bucket": 1024,
+            "accuracy": 0.8333333333333334,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 4096,
+            "accuracy": 0.6666666666666666,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 16384,
+            "accuracy": 0.6666666666666666,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 2,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 4,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 10,
+            "accuracy": 0.0,
+            "count": 2,
+            "failures": 2
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 20,
+            "accuracy": 0.5,
+            "count": 2,
+            "failures": 1
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 50,
+            "accuracy": 0.0,
+            "count": 2,
+            "failures": 2
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 75,
+            "accuracy": 0.0,
+            "count": 2,
+            "failures": 2
+          }
+        ],
+        "frozen_policy": null
+      }
+    }
+  },
+  "production_tuned": {
+    "winner": "jev",
+    "accuracy_difference": 0.4166666666666667,
+    "ci95": [
+      0.16666666666666666,
+      0.6666666666666666
+    ],
+    "families": 6,
+    "left": "jev-production-tuned",
+    "right": "laya-production-tuned",
+    "systems": {
+      "jev-production-tuned": {
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "brier": 3.827204969046138E-15,
+        "ece": 1.5959191301817555E-8,
+        "failure_count": 0,
+        "failure_rate": 0.0,
+        "p50_latency_ms": 328.8872705306858,
+        "p95_latency_ms": 377.2518559242598,
+        "total_cost_usd": 0.012284076000000001,
+        "cost_source": "estimated",
+        "cost_details": {
+          "provider_reported_total_usd": null,
+          "estimated_api_total_usd": 0.012284076000000001,
+          "observed_requests": 246,
+          "reported_cost_count": 0,
+          "observed_questions": 2478,
+          "missing_usage_requests": 0,
+          "unpriced_failed_attempts": 0,
+          "note": "Recorded usage only; failed attempts without usage may incur additional cost. Warm-up is reported separately.",
+          "estimated_cost_count": 246,
+          "per_1000_decisions_usd": 0.004957254237288136,
+          "warmup_estimated_api_usd": 0.000441336,
+          "warmup_usage_complete": true
+        },
+        "cost_per_1000_decisions_usd": 0.004957254237288136,
+        "robustness": [
+          {
+            "variant": "paraphrase",
+            "primitive": "choice",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": 0.0,
+            "probability_drift": {
+              "value": 0.0,
+              "numerator": 0.0,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-choice-03-paraphrase",
+              "customer_support-choice-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "noul",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": 0.0,
+            "probability_drift": {
+              "value": 4.482287147750937E-19,
+              "numerator": 8.964574295501875E-19,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-noul-03-paraphrase",
+              "customer_support-noul-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "score",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": 0.0,
+            "probability_drift": {
+              "value": 6.321230364005927E-9,
+              "numerator": 1.2642460728011854E-8,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-score-03-paraphrase",
+              "customer_support-score-04-paraphrase"
+            ]
+          }
+        ],
+        "repeatability": [
+          {
+            "case_id": "customer_support-choice-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 6.927308321654892E-23,
+            "max_probability_std": 1.3854616643309784E-22,
+            "mean_js_divergence": 4.793808084059302E-23
+          },
+          {
+            "case_id": "customer_support-noul-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 8.484185339495106E-23,
+            "max_probability_std": 1.6968370678990211E-22,
+            "mean_js_divergence": 7.190712126088953E-23
+          },
+          {
+            "case_id": "customer_support-noul-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 5.841360345622091E-19,
+            "max_probability_std": 1.1682720691244183E-18,
+            "mean_js_divergence": 3.58582971820075E-19
+          },
+          {
+            "case_id": "customer_support-noul-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 9.172725978611947E-8,
+            "max_probability_std": 1.3759088971853027E-7,
+            "mean_js_divergence": 3.012574328658801E-8
+          }
+        ],
+        "load_tests": [
+          {
+            "concurrency": 1,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 3.066831086814496,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 15.154386315022549,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 23.86304492534568,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 129.1921267099942,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 5.718915366459915,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 59.42882188137012,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 111.87237054081064,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 502.98521393810034,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 6.045961254741534,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 74.89973466748613,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 159.86004684162083,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 766.401848196799,
+            "failures": 0,
+            "queue_p50_ms": 0.0
+          }
+        ],
+        "diagnostics": [
+          {
+            "variant": "context_length",
+            "bucket": 1024,
+            "accuracy": 1.0,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 4096,
+            "accuracy": 1.0,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 16384,
+            "accuracy": 1.0,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 2,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 4,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 10,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 20,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 50,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 75,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          }
+        ],
+        "frozen_policy": {
+          "accepted": 10,
+          "denominator": 12,
+          "errors": 0,
+          "coverage": 0.8333333333333334,
+          "risk": 0.0,
+          "unstable": true
+        }
+      },
+      "laya-production-tuned": {
+        "accuracy": 0.5833333333333334,
+        "macro_f1": 0.8333333333333333,
+        "brier": 0.2999793305402667,
+        "ece": 0.29998160484802805,
+        "failure_count": 2,
+        "failure_rate": 0.16666666666666666,
+        "p50_latency_ms": 44.532146072015166,
+        "p95_latency_ms": 55.46831410611048,
+        "total_cost_usd": null,
+        "cost_source": null,
+        "cost_details": {
+          "provider_reported_total_usd": null,
+          "estimated_api_total_usd": null,
+          "observed_requests": 246,
+          "reported_cost_count": 0,
+          "observed_questions": 2478,
+          "missing_usage_requests": 0,
+          "unpriced_failed_attempts": 61,
+          "note": "Recorded usage only; failed attempts without usage may incur additional cost. Warm-up is reported separately.",
+          "estimated_cost_count": 0,
+          "per_1000_decisions_usd": null
+        },
+        "cost_per_1000_decisions_usd": null,
+        "robustness": [
+          {
+            "variant": "paraphrase",
+            "primitive": "choice",
+            "count": 2,
+            "comparable_count": 1,
+            "missing_pairs": 1,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.5,
+            "accuracy_delta": 0.5,
+            "probability_drift": {
+              "value": 0.000001192457167348033,
+              "numerator": 0.000001192457167348033,
+              "denominator": 1,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-choice-03-paraphrase",
+              "customer_support-choice-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "noul",
+            "count": 2,
+            "comparable_count": 2,
+            "missing_pairs": 0,
+            "answer_flip_rate": 0.5,
+            "harmful_flip_rate": 0.5,
+            "beneficial_flip_rate": 0.0,
+            "accuracy_delta": -0.5,
+            "probability_drift": {
+              "value": 0.34627408107018204,
+              "numerator": 0.6925481621403641,
+              "denominator": 2,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-noul-03-paraphrase",
+              "customer_support-noul-04-paraphrase"
+            ]
+          },
+          {
+            "variant": "paraphrase",
+            "primitive": "score",
+            "count": 2,
+            "comparable_count": 1,
+            "missing_pairs": 1,
+            "answer_flip_rate": 0.0,
+            "harmful_flip_rate": 0.0,
+            "beneficial_flip_rate": 0.5,
+            "accuracy_delta": 0.5,
+            "probability_drift": {
+              "value": 4.053417399290453E-13,
+              "numerator": 4.053417399290453E-13,
+              "denominator": 1,
+              "unavailable_reason": null
+            },
+            "case_ids": [
+              "customer_support-score-03-paraphrase",
+              "customer_support-score-04-paraphrase"
+            ]
+          }
+        ],
+        "repeatability": [
+          {
+            "case_id": "customer_support-choice-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-choice-04-base",
+            "calls": 5,
+            "valid": 0,
+            "modal_agreement": null,
+            "any_flip": null,
+            "mean_probability_std": null,
+            "max_probability_std": null,
+            "mean_js_divergence": null
+          },
+          {
+            "case_id": "customer_support-choice-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-03-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 5.551115123125783E-17,
+            "max_probability_std": 1.1102230246251565E-16,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 5.169878828456423E-26,
+            "max_probability_std": 1.0339757656912846E-25,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-noul-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-03-base",
+            "calls": 5,
+            "valid": 0,
+            "modal_agreement": null,
+            "any_flip": null,
+            "mean_probability_std": null,
+            "max_probability_std": null,
+            "mean_js_divergence": null
+          },
+          {
+            "case_id": "customer_support-score-03-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 3.700743415417188E-17,
+            "max_probability_std": 1.1102230246251565E-16,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-base",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 3.700743415417188E-17,
+            "max_probability_std": 1.1102230246251565E-16,
+            "mean_js_divergence": 0.0
+          },
+          {
+            "case_id": "customer_support-score-04-paraphrase",
+            "calls": 5,
+            "valid": 5,
+            "modal_agreement": 1.0,
+            "any_flip": false,
+            "mean_probability_std": 0.0,
+            "max_probability_std": 0.0,
+            "mean_js_divergence": 0.0
+          }
+        ],
+        "load_tests": [
+          {
+            "concurrency": 1,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 5.937079165934337,
+            "failures": 2,
+            "queue_p50_ms": 0.002813059836626053
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 19.190616404683105,
+            "failures": 4,
+            "queue_p50_ms": 0.002354034222662449
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 32.30893338755425,
+            "failures": 4,
+            "queue_p50_ms": 0.002312473952770233
+          },
+          {
+            "concurrency": 1,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 64.00433623127543,
+            "failures": 4,
+            "queue_p50_ms": 0.0024579931050539017
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 5.519786410013594,
+            "failures": 2,
+            "queue_p50_ms": 214.2287918832153
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 14.822058081246839,
+            "failures": 4,
+            "queue_p50_ms": 806.5463334787637
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 54.719827998587526,
+            "failures": 4,
+            "queue_p50_ms": 501.9310414791107
+          },
+          {
+            "concurrency": 4,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 80.08743422042312,
+            "failures": 4,
+            "queue_p50_ms": 1779.2380624450743
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 1,
+            "count": 12,
+            "questions_per_second": 6.1159830935605415,
+            "failures": 2,
+            "queue_p50_ms": 1357.670416473411
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 5,
+            "count": 12,
+            "questions_per_second": 35.177965462002334,
+            "failures": 4,
+            "queue_p50_ms": 854.9968545557931
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 10,
+            "count": 12,
+            "questions_per_second": 60.011975770883616,
+            "failures": 4,
+            "queue_p50_ms": 916.4257498923689
+          },
+          {
+            "concurrency": 8,
+            "batch_size": 50,
+            "count": 12,
+            "questions_per_second": 78.08818093324996,
+            "failures": 4,
+            "queue_p50_ms": 3743.1284374324605
+          }
+        ],
+        "diagnostics": [
+          {
+            "variant": "context_length",
+            "bucket": 1024,
+            "accuracy": 0.8333333333333334,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 4096,
+            "accuracy": 0.6666666666666666,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "context_length",
+            "bucket": 16384,
+            "accuracy": 0.6666666666666666,
+            "count": 6,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 2,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 4,
+            "accuracy": 1.0,
+            "count": 2,
+            "failures": 0
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 10,
+            "accuracy": 0.0,
+            "count": 2,
+            "failures": 2
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 20,
+            "accuracy": 0.5,
+            "count": 2,
+            "failures": 1
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 50,
+            "accuracy": 0.0,
+            "count": 2,
+            "failures": 2
+          },
+          {
+            "variant": "option_cardinality",
+            "bucket": 75,
+            "accuracy": 0.0,
+            "count": 2,
+            "failures": 2
+          }
+        ],
+        "frozen_policy": {
+          "accepted": 5,
+          "denominator": 12,
+          "errors": 1,
+          "coverage": 0.4166666666666667,
+          "risk": 0.2,
+          "unstable": true
+        }
+      }
+    }
+  },
+  "calibration_id": "01a0edc3-58bd-71d4-9a4d-3ea0ee4c1d51-calibration",
+  "protocol_id": "01a0edd1-2189-7270-8a9a-a575cb8663f1",
+  "markdown": "# DecisionLab benchmark report\n\n## Default\n\nJev leads on paired accuracy (difference 0.4166666666666667; 95% CI [0.16666666666666666, 0.6666666666666666]).\n\n## Production tuned\n\nJev leads on paired accuracy (difference 0.4166666666666667; 95% CI [0.16666666666666666, 0.6666666666666666]).\n\nResults apply to this dataset and frozen configuration; they do not establish a universal model ranking."
+}

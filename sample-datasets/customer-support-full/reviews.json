@@ -1,0 +1,74 @@
+[
+  {
+    "case_id": "customer_support-choice-03-base",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": "account",
+    "rationale": "Updating the email address on a profile is explicitly an account and profile request."
+  },
+  {
+    "case_id": "customer_support-choice-03-paraphrase",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": "account",
+    "rationale": "Updating the email address on a profile is explicitly an account and profile request."
+  },
+  {
+    "case_id": "customer_support-choice-04-base",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": "billing",
+    "rationale": "A corrected tax invoice falls under the Billing description for invoices."
+  },
+  {
+    "case_id": "customer_support-choice-04-paraphrase",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": "billing",
+    "rationale": "A corrected tax invoice falls under the Billing description for invoices."
+  },
+  {
+    "case_id": "customer_support-noul-03-base",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": true,
+    "rationale": "The customer explicitly says to refund the amount, satisfying the return-of-payment rule."
+  },
+  {
+    "case_id": "customer_support-noul-03-paraphrase",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": true,
+    "rationale": "The customer explicitly says to refund the amount, satisfying the return-of-payment rule."
+  },
+  {
+    "case_id": "customer_support-noul-04-base",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": false,
+    "rationale": "The customer asks for an invoice explanation and does not request that money be returned."
+  },
+  {
+    "case_id": "customer_support-noul-04-paraphrase",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": false,
+    "rationale": "The customer asks for an invoice explanation and does not request that money be returned."
+  },
+  {
+    "case_id": "customer_support-score-03-base",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": 2,
+    "rationale": "No users can sign in and no alternative exists, so core work is blocked with no workaround."
+  },
+  {
+    "case_id": "customer_support-score-03-paraphrase",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": 2,
+    "rationale": "No users can sign in and no alternative exists, so core work is blocked with no workaround."
+  },
+  {
+    "case_id": "customer_support-score-04-base",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": 0,
+    "rationale": "The blurry icon remains clickable, so the issue is cosmetic and work can continue."
+  },
+  {
+    "case_id": "customer_support-score-04-paraphrase",
+    "reviewer": "Codex AI reviewer — not an independent human",
+    "answer": 0,
+    "rationale": "The blurry icon remains clickable, so the issue is cosmetic and work can continue."
+  }
+]
