@@ -1,4 +1,6 @@
 """Invariant safety tests for api_client. generate-mcp ships these; do not weaken them."""
+import socket
+
 import httpx
 import pytest
 import respx
@@ -74,16 +76,35 @@ async def test_204_returns_status_only():
     assert await get_client().request("DELETE", "/users/{user_id}", path_params={"user_id": "x"}) == {"status": 204}
 
 
-@pytest.mark.parametrize("url", [
-    "http://169.254.169.254/latest/meta-data",
-    "http://metadata.google.internal/computeMetadata",
-    "http://[fe80::1]/",
-    "ftp://example.com/",
-    "file:///etc/passwd",
-])
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://169.254.169.254/latest/meta-data",
+        "http://2852039166/latest/meta-data",
+        "http://0xa9fea9fe/latest/meta-data",
+        "http://[::ffff:100.100.100.200]/",
+        "http://metadata.google.internal/computeMetadata",
+        "http://[fe80::1]/",
+        "ftp://example.com/",
+        "file:///etc/passwd",
+    ],
+)
 def test_blocked_destinations(url):
     with pytest.raises(ApiError) as e:
         assert_safe_destination(url)
+    assert e.value.category == "blocked_destination"
+
+
+def test_dns_alias_resolving_to_metadata_is_blocked(monkeypatch):
+    monkeypatch.setattr(
+        socket,
+        "getaddrinfo",
+        lambda *args, **kwargs: [
+            (2, 1, 6, "", ("169.254.169.254", 80)),
+        ],
+    )
+    with pytest.raises(ApiError) as e:
+        assert_safe_destination("http://backend.example.test")
     assert e.value.category == "blocked_destination"
 
 

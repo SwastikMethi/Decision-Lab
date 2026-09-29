@@ -7,8 +7,10 @@ token redaction in every error. tools.py must not bypass this module.
 """
 from __future__ import annotations
 
+import asyncio
 import ipaddress
 import re
+import socket
 from functools import lru_cache
 from typing import Any
 from urllib.parse import quote, urlparse
@@ -20,6 +22,7 @@ from .config import get_settings
 
 SENSITIVE_HEADERS = {"authorization", "cookie", "set-cookie", "x-api-key", "x-auth-token", "proxy-authorization"}
 BLOCKED_HOSTS = {"metadata.google.internal", "metadata", "169.254.169.254", "100.100.100.200", "fd00:ec2::254"}
+BLOCKED_IPS = {ipaddress.ip_address(host) for host in BLOCKED_HOSTS if ":" in host or host[0].isdigit()}
 TOKEN_SHAPES = re.compile(r"(?i)(bearer\s+)[A-Za-z0-9._\-]{8,}|eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}|sk-[A-Za-z0-9]{16,}")
 UNSAFE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
 
@@ -62,6 +65,23 @@ def redact_mapping(data: Any, depth: int = 0) -> Any:
     return data
 
 
+def _normalized_ip(host: str) -> ipaddress.IPv4Address | ipaddress.IPv6Address | None:
+    host = host.split("%", 1)[0]
+    try:
+        ip = ipaddress.ip_address(host)
+    except ValueError:
+        try:
+            ip = ipaddress.ip_address(socket.inet_aton(host))
+        except OSError:
+            return None
+    return ip.ipv4_mapped or ip if isinstance(ip, ipaddress.IPv6Address) else ip
+
+
+def _assert_safe_ip(ip: ipaddress.IPv4Address | ipaddress.IPv6Address, host: str) -> None:
+    if ip in BLOCKED_IPS or ip.is_link_local:
+        raise ApiError("blocked_destination", f"metadata or link-local destination {host} is blocked")
+
+
 def assert_safe_destination(url: str) -> None:
     u = urlparse(url)
     if u.scheme not in {"http", "https"}:
@@ -71,12 +91,24 @@ def assert_safe_destination(url: str) -> None:
         raise ApiError("blocked_destination", "URL has no host")
     if host in BLOCKED_HOSTS:
         raise ApiError("blocked_destination", f"destination {host} is blocked")
-    try:
-        ip = ipaddress.ip_address(host)
-    except ValueError:
+
+    ip = _normalized_ip(host)
+    if ip is not None:
+        _assert_safe_ip(ip, host)
         return
-    if ip.is_link_local or (ip.version == 6 and str(ip).startswith("fe80")):
-        raise ApiError("blocked_destination", f"link-local destination {host} is blocked")
+
+    try:
+        port = u.port or (443 if u.scheme == "https" else 80)
+        addresses = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
+    except (OSError, ValueError):
+        raise ApiError("blocked_destination", f"destination {host} could not be resolved safely") from None
+    if not addresses:
+        raise ApiError("blocked_destination", f"destination {host} could not be resolved safely")
+    for address in addresses:
+        resolved = _normalized_ip(str(address[4][0]))
+        if resolved is None:
+            raise ApiError("blocked_destination", f"destination {host} resolved unexpectedly")
+        _assert_safe_ip(resolved, host)
 
 
 class ApiClient:
@@ -127,6 +159,7 @@ class ApiClient:
             raise ApiError("invalid_input", f"missing path parameter(s): {', '.join(missing)}")
         params = {k: v for k, v in (query or {}).items() if v is not None}
         try:
+            await asyncio.to_thread(assert_safe_destination, self._base_url)
             resp = await self._client.request(method, url_path, params=params or None, json=json)
         except httpx.TimeoutException:
             raise ApiError("timeout", f"{method} {url_path} timed out") from None

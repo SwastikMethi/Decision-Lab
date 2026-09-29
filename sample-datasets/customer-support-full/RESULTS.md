@@ -5,7 +5,7 @@ This is an exploratory live run of the `full` DecisionLab profile against Jev an
 ## Dataset and method
 
 - 24 synthetic customer-support cases across 12 semantic families.
-- 12 development cases were used for calibration; 12 sealed evaluation cases were used for comparison.
+- 12 development cases were used for calibration; 12 held-out evaluation cases were frozen before comparison. Their labels remained available through the dataset preview API before review, while the reviewer packet omitted them, so they were not sealed from every interface.
 - Choice, Noul, and Score each contributed four development and four evaluation cases. Every family has a base and paraphrase case.
 - The evaluation answers were reviewed by `Codex AI reviewer — not an independent human`. This run is marked `publication: false` and is not an independently reviewed benchmark.
 - The live run completed 1,008 scheduled requests and 9,936 logical questions, plus 18 warm-up requests. It exercised quality, calibration, paraphrase robustness, five-call repeatability, load, context-length, and option-cardinality suites.
