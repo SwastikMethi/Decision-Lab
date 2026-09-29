@@ -75,8 +75,8 @@ def system_metrics(accuracy):
     }
 
 
-def complete_development(store, workflow, run_id):
-    for adapter in ("jev", "laya"):
+def complete_development(store, workflow, run_id, adapters=("jev", "laya")):
+    for adapter in adapters:
         store.append(
             run_id,
             "predictions",
@@ -128,6 +128,19 @@ def test_prepare_requires_development_and_evaluation_partitions(tmp_path):
 
     with pytest.raises(ValueError, match="development and evaluation"):
         manager.create("Incomplete", dataset_bytes(workflow_cases()[0]))
+
+
+def test_prepare_requires_development_coverage_for_evaluation_primitives(tmp_path):
+    from decisionlab.store import Store
+    from decisionlab.workflows import BenchmarkWorkflowManager
+
+    store = Store(tmp_path)
+    manager = BenchmarkWorkflowManager(store, FakeRunner(store))
+    development = case(id="dev", family_id="dev-family", split="development")
+    evaluation = case(primitive="score", id="eval", family_id="eval-family", split="evaluation")
+
+    with pytest.raises(ValueError, match="score"):
+        manager.create("Missing coverage", dataset_bytes(development, evaluation))
 
 
 async def test_advance_requires_consent_and_starts_at_most_one_run(tmp_path):
@@ -202,6 +215,96 @@ async def test_workflow_pauses_for_review_then_completes_both_tracks(tmp_path):
     assert report["default"]["winner"] == "no_clear_winner"
     assert report["production_tuned"]["winner"] == "no_clear_winner"
     assert "No clear winner" in report["markdown"]
+
+
+async def test_missing_provider_calibration_blocks_before_evaluation(tmp_path):
+    from decisionlab.store import Store
+    from decisionlab.workflows import BenchmarkWorkflowManager
+
+    store = Store(tmp_path)
+    runner = FakeRunner(store)
+    manager = BenchmarkWorkflowManager(store, runner)
+    workflow = manager.create("Missing calibration", dataset_bytes(*workflow_cases()))
+    started = await manager.advance(
+        workflow["workflow_id"], confirm_live_calls=True, confirm_remote_data=True
+    )
+    complete_development(store, workflow, started["runs"]["development"], adapters=("jev",))
+
+    blocked = await manager.advance(workflow["workflow_id"])
+
+    assert blocked["stage"] == "blocked"
+    assert "laya:choice" in blocked["blocker"]
+    assert len(runner.created) == 1
+    assert manager.get(workflow["workflow_id"])["blocker"] == blocked["blocker"]
+
+
+async def test_no_usable_calibration_blocks_before_evaluation(tmp_path):
+    from decisionlab.store import Store
+    from decisionlab.workflows import BenchmarkWorkflowManager
+
+    store = Store(tmp_path)
+    runner = FakeRunner(store)
+    manager = BenchmarkWorkflowManager(store, runner)
+    workflow = manager.create("No calibration", dataset_bytes(*workflow_cases()))
+    started = await manager.advance(
+        workflow["workflow_id"], confirm_live_calls=True, confirm_remote_data=True
+    )
+    store.update(started["runs"]["development"], status="completed", partial=False)
+
+    blocked = await manager.advance(workflow["workflow_id"])
+
+    assert blocked["stage"] == "blocked"
+    assert "No eligible development predictions" in blocked["blocker"]
+    assert len(runner.created) == 1
+
+
+async def test_advance_recovers_protocol_frozen_before_workflow_save(tmp_path, monkeypatch):
+    from decisionlab import governance
+    from decisionlab.store import Store
+    from decisionlab.workflows import BenchmarkWorkflowManager
+
+    timestamps = iter(["2026-01-01T00:00:00Z", "2026-01-01T00:00:01Z", "2026-01-01T00:00:02Z"])
+    monkeypatch.setattr(governance, "now", lambda: next(timestamps))
+    store = Store(tmp_path)
+    runner = FakeRunner(store)
+    manager = BenchmarkWorkflowManager(store, runner)
+    workflow = manager.create("Recover freeze", dataset_bytes(*workflow_cases()))
+    workflow_id = workflow["workflow_id"]
+    started = await manager.advance(workflow_id, confirm_live_calls=True, confirm_remote_data=True)
+    complete_development(store, workflow, started["runs"]["development"])
+    waiting = await manager.advance(workflow_id)
+    store.write_json(
+        waiting["review"]["submission_path"],
+        [
+            {
+                "case_id": "eval",
+                "reviewer": "Independent reviewer",
+                "answer": "billing",
+                "rationale": "The policy sends payment issues to Billing.",
+            }
+        ],
+    )
+    save = manager._save
+
+    def interrupt(workflow_state):
+        if workflow_state["stage"] == "ready_for_default":
+            raise RuntimeError("simulated interruption")
+        save(workflow_state)
+
+    monkeypatch.setattr(manager, "_save", interrupt)
+    with pytest.raises(RuntimeError, match="simulated interruption"):
+        await manager.advance(workflow_id)
+    review_path = store.path("reviews", waiting["datasets"]["evaluation"] + ".json")
+    frozen_review = review_path.read_bytes()
+    monkeypatch.setattr(manager, "_save", save)
+
+    resumed = await manager.advance(workflow_id)
+
+    assert resumed["stage"] == "default_running"
+    assert resumed["protocol_id"]
+    assert resumed["review"]["complete"] is True
+    assert review_path.read_bytes() == frozen_review
+    assert len(runner.created) == 2
 
 
 async def test_failed_run_blocks_reruns_and_cancel_preserves_run(tmp_path):

@@ -66,6 +66,14 @@ class BenchmarkWorkflowManager:
             raise ValueError("Dataset must contain both development and evaluation cases")
         if {case.family_id for case in development} & {case.family_id for case in evaluation}:
             raise ValueError("Development and evaluation families must be disjoint")
+        missing_primitives = sorted(
+            {case.primitive for case in evaluation} - {case.primitive for case in development}
+        )
+        if missing_primitives:
+            raise ValueError(
+                "Development data must cover every evaluation primitive; missing: "
+                + ", ".join(missing_primitives)
+            )
 
         workflow_id = identifier()
         dataset_ids = {
@@ -191,7 +199,34 @@ class BenchmarkWorkflowManager:
                     self._save(workflow)
                     return self._status(workflow)
                 if phase == "development":
-                    workflow["calibration_id"] = self._fit_calibration(workflow, run_id)
+                    try:
+                        workflow["calibration_id"] = self._fit_calibration(workflow, run_id)
+                    except ValueError as exc:
+                        workflow["stage"] = "blocked"
+                        workflow["blocker"] = (
+                            f"Calibration could not be fitted: {exc}; evaluation tracks were not started"
+                        )
+                        self._save(workflow)
+                        return self._status(workflow)
+                    calibration = self.store.read_json(
+                        self.store.path("calibrations", workflow["calibration_id"] + ".json")
+                    )
+                    _, evaluation = self.store.dataset(workflow["datasets"]["evaluation"])
+                    required = {
+                        f"{adapter}:{case.primitive}"
+                        for adapter in ("jev", "laya")
+                        for case in evaluation
+                    }
+                    missing = sorted(required - calibration["parameters"].keys())
+                    if missing:
+                        workflow["stage"] = "blocked"
+                        workflow["blocker"] = (
+                            "Calibration does not cover required provider/primitive groups: "
+                            + ", ".join(missing)
+                            + "; evaluation tracks were not started"
+                        )
+                        self._save(workflow)
+                        return self._status(workflow)
                     workflow["stage"] = "waiting_for_review"
                     self._save(workflow)
                     continue
@@ -205,6 +240,13 @@ class BenchmarkWorkflowManager:
                 self._write_report(workflow)
                 return self.get(workflow_id)
             if stage == "waiting_for_review":
+                if self._freeze(workflow, create=False):
+                    workflow["review"].update(
+                        review_status(self.store, workflow["datasets"]["evaluation"])
+                    )
+                    workflow["stage"] = "ready_for_default"
+                    self._save(workflow)
+                    continue
                 submission = Path(workflow["review"]["submission_path"])
                 if not submission.exists():
                     return self._status(workflow)
@@ -294,7 +336,7 @@ class BenchmarkWorkflowManager:
         self.store.write_json(path, result)
         return calibration_id
 
-    def _freeze(self, workflow):
+    def _freeze(self, workflow, create=True):
         existing = next(
             (
                 self.store.read_json(path)
@@ -306,6 +348,8 @@ class BenchmarkWorkflowManager:
         )
         if existing:
             protocol = existing
+        elif not create:
+            return False
         else:
             development = self.store.manifest(workflow["runs"]["development"])["effective_config"]
             revision = development["systems"]["laya"]["checkpoint_revision"]
@@ -343,6 +387,7 @@ class BenchmarkWorkflowManager:
                 for track in ("default", "production-tuned")
             }
         )
+        return True
 
     def _configuration(
         self,
