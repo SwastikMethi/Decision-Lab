@@ -97,6 +97,14 @@ npm run types:api
 
 The project includes a local MCP server that runs the complete DecisionLab methodology from a folder containing `dataset.jsonl`. The backend owns durable progress; closing the MCP client does not lose workflow state.
 
+For a one-command installation and free smoke test, run:
+
+```sh
+./install-mcp.sh
+```
+
+This installs dependencies, runs the offline suites, starts DecisionLab on port 8879, verifies all six MCP tools, and prepares the bundled sample without provider calls. To use your own data, pass its absolute root and child folder: `./install-mcp.sh /absolute/path/to/datasets support-routing`. The script prints the environment file to source before opening Codex and supports `./install-mcp.sh --stop` for its background backend.
+
 Start DecisionLab first. Keep `TYPESAFE_API_KEY` and all provider configuration only in that backend process:
 
 ```sh

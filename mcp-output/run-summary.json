@@ -1,7 +1,7 @@
 {
   "status": "passed_with_warnings",
   "repository": "decisionlab-mcp",
-  "generated_at": "2026-09-29T12:45:37Z",
+  "generated_at": "2026-09-29T14:33:10Z",
   "discovery": {
     "method": "openapi_runtime",
     "operations": 33,
@@ -13,7 +13,7 @@
     "transport": "stdio"
   },
   "verification": {
-    "backend_tests_passed": 73,
+    "backend_tests_passed": 74,
     "mcp_tests_passed": 29,
     "frontend_tests_passed": 6,
     "failed": 0,

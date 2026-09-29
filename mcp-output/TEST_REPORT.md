@@ -35,7 +35,7 @@ Passed 15, failed 0, skipped 2.
 
 ## Final repository checks
 
-- ✓ **backend test suite (73 passed)**
+- ✓ **backend test suite (74 passed)**
 - ✓ **MCP unit suite (29 passed)**
 - ✓ **frontend unit suite (6 passed)**
 - ✓ **frontend production build**
