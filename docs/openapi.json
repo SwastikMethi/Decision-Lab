@@ -37,6 +37,214 @@
         }
       }
     },
+    "/api/v1/benchmark-workflows": {
+      "get": {
+        "summary": "Benchmark Workflows",
+        "operationId": "benchmark_workflows_api_v1_benchmark_workflows_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Benchmark Workflow",
+        "operationId": "create_benchmark_workflow_api_v1_benchmark_workflows_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BenchmarkWorkflowRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmark-workflows/{workflow_id}": {
+      "get": {
+        "summary": "Benchmark Workflow",
+        "operationId": "benchmark_workflow_api_v1_benchmark_workflows__workflow_id__get",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmark-workflows/{workflow_id}/advance": {
+      "post": {
+        "summary": "Advance Benchmark Workflow",
+        "operationId": "advance_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__advance_post",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BenchmarkAdvanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmark-workflows/{workflow_id}/cancel": {
+      "post": {
+        "summary": "Cancel Benchmark Workflow",
+        "operationId": "cancel_benchmark_workflow_api_v1_benchmark_workflows__workflow_id__cancel_post",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmark-workflows/{workflow_id}/report": {
+      "get": {
+        "summary": "Benchmark Workflow Report",
+        "operationId": "benchmark_workflow_report_api_v1_benchmark_workflows__workflow_id__report_get",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Workflow Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/datasets": {
       "get": {
         "summary": "Datasets",
@@ -1557,6 +1765,59 @@
   },
   "components": {
     "schemas": {
+      "BenchmarkAdvanceRequest": {
+        "properties": {
+          "confirm_live_calls": {
+            "type": "boolean",
+            "title": "Confirm Live Calls",
+            "default": false
+          },
+          "confirm_remote_data": {
+            "type": "boolean",
+            "title": "Confirm Remote Data",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "BenchmarkAdvanceRequest"
+      },
+      "BenchmarkWorkflowRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "dataset_jsonl": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dataset Jsonl"
+          },
+          "profile": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "full"
+            ],
+            "title": "Profile",
+            "default": "standard"
+          },
+          "publication": {
+            "type": "boolean",
+            "title": "Publication",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "dataset_jsonl"
+        ],
+        "title": "BenchmarkWorkflowRequest"
+      },
       "Body_upload_api_v1_datasets_validate_post": {
         "properties": {
           "file": {

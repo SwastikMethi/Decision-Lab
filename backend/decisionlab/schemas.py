@@ -241,3 +241,15 @@ class RunConfiguration(Contract):
         if self.mode == "live" and not self.acknowledge_remote:
             raise ValueError("Confirm that Jev-bound state leaves this machine")
         return self
+
+
+class BenchmarkWorkflowRequest(Contract):
+    name: str = Field(min_length=1, max_length=160)
+    dataset_jsonl: str = Field(min_length=1)
+    profile: Literal["standard", "full"] = "standard"
+    publication: bool = False
+
+
+class BenchmarkAdvanceRequest(Contract):
+    confirm_live_calls: bool = False
+    confirm_remote_data: bool = False

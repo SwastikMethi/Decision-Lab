@@ -23,8 +23,14 @@ from .metrics import SCORING_VERSION, gold
 from .playback import PlaybackPage, playback_page
 from .reports import bundle, write_reports
 from .runner import Runner, make_schedule
-from .schemas import LayaConfiguration, RunConfiguration
+from .schemas import (
+    BenchmarkAdvanceRequest,
+    BenchmarkWorkflowRequest,
+    LayaConfiguration,
+    RunConfiguration,
+)
 from .store import TERMINAL, Store, identifier, now
+from .workflows import BenchmarkWorkflowManager
 
 
 def case_filters(
@@ -76,6 +82,7 @@ def create_app(root=None):
     load_dotenv()
     store = Store(root or os.getenv("DECISIONLAB_DATA_ROOT", "./data"), recover=False)
     runner = Runner(store)
+    workflow_manager = BenchmarkWorkflowManager(store, runner)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -87,7 +94,11 @@ def create_app(root=None):
                 await runner.close()
 
     app = FastAPI(title="DecisionLab", version="1.0.0", lifespan=lifespan)
-    app.state.store, app.state.runner = store, runner
+    app.state.store, app.state.runner, app.state.workflow_manager = (
+        store,
+        runner,
+        workflow_manager,
+    )
     app.add_middleware(
         TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "[::1]", "testserver"]
     )
@@ -255,6 +266,45 @@ def create_app(root=None):
             "storage": {"writable": os.access(store.root, os.W_OK)},
             "simulation_available": os.getenv("DECISIONLAB_ALLOW_FAKE", "true").lower() == "true",
         }
+
+    @app.post("/api/v1/benchmark-workflows", status_code=201)
+    def create_benchmark_workflow(body: BenchmarkWorkflowRequest):
+        return workflow_manager.create(
+            body.name,
+            body.dataset_jsonl,
+            profile=body.profile,
+            publication=body.publication,
+        )
+
+    @app.get("/api/v1/benchmark-workflows")
+    def benchmark_workflows():
+        items = workflow_manager.list()
+        return {"items": items, "total": len(items)}
+
+    @app.get("/api/v1/benchmark-workflows/{workflow_id}")
+    def benchmark_workflow(workflow_id: str):
+        return workflow_manager.get(workflow_id)
+
+    @app.post("/api/v1/benchmark-workflows/{workflow_id}/advance")
+    async def advance_benchmark_workflow(workflow_id: str, body: BenchmarkAdvanceRequest):
+        try:
+            return await workflow_manager.advance(
+                workflow_id,
+                confirm_live_calls=body.confirm_live_calls,
+                confirm_remote_data=body.confirm_remote_data,
+            )
+        except ValueError as exc:
+            if str(exc) == "An evaluation is already active":
+                raise HTTPException(409, str(exc)) from exc
+            raise
+
+    @app.post("/api/v1/benchmark-workflows/{workflow_id}/cancel")
+    async def cancel_benchmark_workflow(workflow_id: str):
+        return await workflow_manager.cancel(workflow_id)
+
+    @app.get("/api/v1/benchmark-workflows/{workflow_id}/report")
+    def benchmark_workflow_report(workflow_id: str):
+        return workflow_manager.report(workflow_id)
 
     @app.get("/api/v1/datasets")
     def datasets():
