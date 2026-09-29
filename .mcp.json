@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "decisionlab-mcp": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "mcp-server",
+        "repo-mcp"
+      ],
+      "env": {
+        "TARGET_API_BASE_URL": "${TARGET_API_BASE_URL:-http://127.0.0.1:8768}",
+        "DECISIONLAB_DATASET_ROOT": "${DECISIONLAB_DATASET_ROOT}"
+      },
+      "_generated_by": "generate-mcp"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+# generated-by: generate-mcp
+[mcp_servers.decisionlab-mcp]
+command = "uv"
+args = ["run", "repo-mcp"]
+cwd = "mcp-server"
+env_vars = ["TARGET_API_BASE_URL", "DECISIONLAB_DATASET_ROOT"]
+startup_timeout_sec = 30

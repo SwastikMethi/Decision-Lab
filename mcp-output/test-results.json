@@ -1,9 +1,9 @@
 {
   "status": "passed_with_warnings",
   "counts": {
-    "passed": 13,
+    "passed": 15,
     "failed": 0,
-    "skipped": 3
+    "skipped": 2
   },
   "sections": {
     "Static validation": [
@@ -120,10 +120,18 @@
     ],
     "Client connection checks": [
       {
-        "name": "claude/codex mcp list",
-        "status": "skipped",
+        "name": "claude mcp list shows decisionlab-mcp (pending approval)",
+        "status": "passed",
         "expected": "",
-        "observed": "deferred to stage 7: run run_inspector_tests.py --clients-only after the configs are applied",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "codex mcp list shows decisionlab-mcp (listed)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
         "error": "",
         "next_action": ""
       }

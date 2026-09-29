@@ -93,6 +93,36 @@ Regenerate the TypeScript request contract after API changes:
 npm run types:api
 ```
 
+## MCP benchmark runner
+
+The project includes a local MCP server that runs the complete DecisionLab methodology from a folder containing `dataset.jsonl`. The backend owns durable progress; closing the MCP client does not lose workflow state.
+
+Start DecisionLab first. Keep `TYPESAFE_API_KEY` and all provider configuration only in that backend process:
+
+```sh
+.venv/bin/decisionlab serve
+```
+
+Set the one filesystem boundary the MCP process needs. The value must be an absolute path, and each child folder you select must contain `dataset.jsonl`:
+
+```sh
+export DECISIONLAB_DATASET_ROOT=/absolute/path/to/evaluation-datasets
+export TARGET_API_BASE_URL=http://127.0.0.1:8768
+```
+
+Project registrations are in `.mcp.json` for Claude Code and `.codex/config.toml` for Codex. Approve the project server in Claude Code, or trust the project in Codex, then use the tools in this order:
+
+1. `prepare_benchmark(dataset_folder="support-routing")` validates and partitions the file, returns estimates, and writes a blind review packet.
+2. Read the estimates with `get_benchmark_status`. When ready, call `advance_benchmark` once with `confirm_live_calls=true` and `confirm_remote_data=true`.
+3. Poll status and advance after development completes. Calibration is fitted only from development predictions.
+4. At `waiting_for_review`, have an independent person label the blind packet and save the JSON array at the returned `review.submission_path`.
+5. Advance to validate the reviews and freeze paired default and production-tuned configurations. Continue polling and advancing; a call starts at most one provider run.
+6. When both tracks complete, call `get_benchmark_report` for the accuracy verdict, paired confidence interval, calibration, failure, latency, cost, robustness, and optional full-profile KPIs.
+
+Use `profile="standard"` for the default quality/calibration/robustness evaluation or `profile="full"` to add repeats, load tests, context length, and option-cardinality diagnostics. The report declares `no_clear_winner` whenever the paired 95% accuracy interval includes zero. It never converts secondary KPIs into a winner or claims a universal model ranking.
+
+The MCP verifier uses mock HTTP only. It never starts a real provider run.
+
 ## Layout
 
 - `backend/decisionlab/`: contracts, dataset policies, adapters, local worker, runner, metrics, calibration, review gates, API, reports.

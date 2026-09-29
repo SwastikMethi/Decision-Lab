@@ -14,12 +14,45 @@ Claude Code and Codex start it from `.mcp.json` and `.codex/config.toml` at the 
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| TARGET_API_BASE_URL | yes | – | Base URL of the API, http or https only |
-| TARGET_API_TOKEN | if the API needs auth | – | Sent as `Authorization: Bearer <token>` |
+| TARGET_API_BASE_URL | yes | `http://127.0.0.1:8768` in Claude project config | Running DecisionLab backend, http or https only |
+| DECISIONLAB_DATASET_ROOT | yes | – | Absolute trusted root containing selectable dataset folders |
+| TARGET_API_TOKEN | no | – | Optional bearer token if a proxy adds API authentication |
 | TARGET_API_TIMEOUT_SECONDS | no | 15 | Per-request timeout |
 | MAX_RESPONSE_BYTES | no | 262144 | Responses above this size are rejected |
 
 Never commit a real value. `.env.example` holds placeholders only.
+
+Each selected folder must contain exactly the input file used by the tool:
+
+```text
+<DECISIONLAB_DATASET_ROOT>/support-routing/dataset.jsonl
+```
+
+`prepare_benchmark("support-routing")` rejects absolute paths, parent traversal, symlink escapes, missing files, non-UTF-8 input, and files over 25 MiB.
+
+## Workflow
+
+1. Start DecisionLab separately on port 8768 with Jev and Laya configured.
+2. Call `prepare_benchmark` and inspect the three request estimates and returned review paths.
+3. Call `advance_benchmark` with both confirmation flags set to `true` to start development. Later calls do not need the flags.
+4. Poll `get_benchmark_status` and call `advance_benchmark` after a run completes. The workflow stops at `waiting_for_review`.
+5. Independently label every case in the packet and save the JSON array at `review.submission_path`:
+
+```json
+[
+  {
+    "case_id": "example-choice-base",
+    "reviewer": "Independent reviewer name",
+    "answer": "billing",
+    "rationale": "The policy routes duplicate payments to Billing."
+  }
+]
+```
+
+6. Advance again to validate reviews, freeze both tracks, and run default followed by production-tuned. Each call starts at most one provider run.
+7. Fetch `get_benchmark_report` after the status becomes `completed`.
+
+Failed, partial, and cancelled runs remain as evidence and are never replaced automatically. A winner is named only when the paired family-bootstrap 95% accuracy interval excludes zero.
 
 ## Layout
 

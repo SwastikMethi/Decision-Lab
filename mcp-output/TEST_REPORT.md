@@ -1,7 +1,7 @@
 # Test report: decisionlab-mcp
 
-Generated 2026-09-29T11:30:46Z by generate-mcp.
-Passed 13, failed 0, skipped 3.
+Generated 2026-09-29T12:32:51Z by generate-mcp.
+Passed 15, failed 0, skipped 2.
 
 ## Static validation
 
@@ -22,11 +22,6 @@ Passed 13, failed 0, skipped 3.
 ## Safe integration tests
 
 - ✓ **tools/call prepare_benchmark (mock API, write)**
-  - Tested: MCP Inspector `tools/call` with the local fixture root and generated mock API
-  - Expected: exit 0, `isError: false`
-  - Observed: exit 0, `isError: false`, mock API returned HTTP 201
-  - Error: The generic verifier omits custom environment variables; the explicit rerun supplied `DECISIONLAB_DATASET_ROOT`.
-  - Next action: None
 - ✓ **tools/call list_benchmarks (mock API)**
 - ✓ **tools/call get_benchmark_status (mock API)**
 - ✓ **tools/call get_benchmark_report (mock API)**
@@ -35,8 +30,8 @@ Passed 13, failed 0, skipped 3.
 
 ## Client connection checks
 
-- – **claude/codex mcp list**
-  - Reason: deferred to stage 7: run run_inspector_tests.py --clients-only after the configs are applied
+- ✓ **claude mcp list shows decisionlab-mcp (pending approval)**
+- ✓ **codex mcp list shows decisionlab-mcp (listed)**
 
 ## Skipped tests and reasons
 
