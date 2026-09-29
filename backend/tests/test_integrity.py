@@ -28,6 +28,16 @@ def seeded_run(store, cases=None, predictions=None, **changes):
     return run_id
 
 
+def test_configuration_fingerprint_survives_json_round_trip():
+    from decisionlab.governance import configuration_fingerprint
+    from decisionlab.schemas import RunConfiguration
+
+    config = RunConfiguration(dataset_ref="demo", mode="fake")
+    restored = RunConfiguration.model_validate(json.loads(json.dumps(config.model_dump())))
+
+    assert configuration_fingerprint(restored) == configuration_fingerprint(config)
+
+
 def test_performance_throughput_counts_questions_not_batches():
     from decisionlab.metrics import compute_metrics
 

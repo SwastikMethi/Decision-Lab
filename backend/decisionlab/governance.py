@@ -25,7 +25,8 @@ def runtime_signature():
 
 
 def configuration_fingerprint(config):
-    value = config.model_dump() if hasattr(config, "model_dump") else dict(config)
+    raw = config.model_dump(mode="json") if hasattr(config, "model_dump") else dict(config)
+    value = RunConfiguration.model_validate(raw).model_dump(mode="json")
     # Presentation labels and protocol association cannot alter the evaluated configuration.
     for key in ("name", "protocol_id", "publication", "acknowledge_remote"):
         value.pop(key, None)
