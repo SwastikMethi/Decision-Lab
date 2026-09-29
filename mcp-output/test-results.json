@@ -1,0 +1,150 @@
+{
+  "status": "passed_with_warnings",
+  "counts": {
+    "passed": 13,
+    "failed": 0,
+    "skipped": 3
+  },
+  "sections": {
+    "Static validation": [
+      {
+        "name": "mcp-design.json tools map only to included inventory operations",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "import repo_mcp.server and load tools",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "no secret patterns in generated files",
+        "status": "passed",
+        "expected": "",
+        "observed": "tests/ excluded: redaction tests hold fake token shapes",
+        "error": "",
+        "next_action": ""
+      }
+    ],
+    "Unit tests": [
+      {
+        "name": "pytest (29 passed in 0.14s)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      }
+    ],
+    "MCP protocol tests": [
+      {
+        "name": "initialize",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "tools/list returns 6 tool(s)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "tools/list matches mcp-design.json",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      }
+    ],
+    "Safe integration tests": [
+      {
+        "name": "tools/call prepare_benchmark (mock API, write)",
+        "status": "passed",
+        "expected": "exit 0, isError false",
+        "observed": "explicit Inspector rerun: exit 0, isError false, mock HTTP 201",
+        "error": "Generic verifier omitted DECISIONLAB_DATASET_ROOT; explicit rerun supplied the local fixture root.",
+        "next_action": ""
+      },
+      {
+        "name": "tools/call list_benchmarks (mock API)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "tools/call get_benchmark_status (mock API)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "tools/call get_benchmark_report (mock API)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "invalid input to prepare_benchmark yields a tool error (missing required input)",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "upstream 401 is a redacted tool error",
+        "status": "passed",
+        "expected": "",
+        "observed": "",
+        "error": "",
+        "next_action": ""
+      }
+    ],
+    "Client connection checks": [
+      {
+        "name": "claude/codex mcp list",
+        "status": "skipped",
+        "expected": "",
+        "observed": "deferred to stage 7: run run_inspector_tests.py --clients-only after the configs are applied",
+        "error": "",
+        "next_action": ""
+      }
+    ],
+    "Skipped tests and reasons": [
+      {
+        "name": "tools/call advance_benchmark",
+        "status": "skipped",
+        "expected": "",
+        "observed": "risk destructive is never called automatically",
+        "error": "",
+        "next_action": ""
+      },
+      {
+        "name": "tools/call cancel_benchmark",
+        "status": "skipped",
+        "expected": "",
+        "observed": "risk destructive is never called automatically",
+        "error": "",
+        "next_action": ""
+      }
+    ]
+  }
+}
